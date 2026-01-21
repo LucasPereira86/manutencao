@@ -7,6 +7,204 @@
     <meta name="theme-color" content="#16213e">
     <title>Checklist - Manutenção de Campo</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .pending-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--status-warning);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .machine-card {
+            position: relative;
+        }
+
+        .history-section {
+            margin-top: 2rem;
+        }
+
+        .history-item {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+        }
+
+        .history-info h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+        }
+
+        .history-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-print {
+            background: var(--accent-secondary);
+            color: #fff;
+        }
+
+        .btn-edit {
+            background: var(--status-warning);
+            color: #000;
+        }
+
+        .btn-delete {
+            background: var(--status-danger);
+            color: #fff;
+        }
+
+        .print-modal {
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .print-content {
+            background: #fff;
+            color: #000;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .print-content h1 {
+            color: #16213e;
+            margin-bottom: 0.5rem;
+        }
+
+        .print-content h2 {
+            color: #1a1a2e;
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.5rem;
+            border-bottom: 2px solid #16213e;
+            padding-bottom: 0.25rem;
+        }
+
+        .print-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .print-item .status {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        .print-item .status.ok {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .print-item .status.problema {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .print-item .status.pendente {
+            background: #6b7280;
+            color: #fff;
+        }
+
+        .print-item .obs {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            margin-left: 2rem;
+        }
+
+        .print-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .print-header-info {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-content,
+            .print-content * {
+                visibility: visible;
+            }
+
+            .print-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .modal-header,
+            .modal button {
+                display: none !important;
+            }
+        }
+
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 80px;
+            right: 1rem;
+            background: var(--status-success);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -54,6 +252,14 @@
                     ⚙️ Gerenciar máquinas
                 </a>
             </div>
+
+            <!-- Histórico de Checklists -->
+            <div class="history-section" id="historicoSection">
+                <h3 class="section-title">📜 Histórico</h3>
+                <div id="listaHistorico">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
         </section>
 
         <!-- Etapa 2: Seleção de Máquina Específica -->
@@ -82,6 +288,7 @@
                         <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;" id="nomeMaquinaSelecionada">Colhedora 01
                         </h2>
                         <p style="opacity: 0.8; font-size: 0.9rem;" id="modeloMaquinaSelecionada">CH570</p>
+                        <p style="opacity: 0.6; font-size: 0.75rem;" id="modoEdicao"></p>
                     </div>
                 </div>
             </div>
@@ -108,9 +315,12 @@
                     placeholder="Descreva observações adicionais..."></textarea>
             </div>
 
-            <div class="mt-3">
-                <button class="btn btn-success btn-block btn-large" onclick="finalizarChecklist()">
-                    ✅ Finalizar Checklist
+            <div class="mt-3" style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="salvarRascunhoManual()">
+                    💾 Salvar Rascunho
+                </button>
+                <button class="btn btn-success" style="flex: 2;" onclick="finalizarChecklist()">
+                    ✅ Finalizar
                 </button>
             </div>
         </section>
@@ -135,6 +345,9 @@
             </a>
         </nav>
     </div>
+
+    <!-- Indicador de Auto-Save -->
+    <div class="auto-save-indicator" id="autoSaveIndicator">💾 Salvo automaticamente</div>
 
     <!-- Modal de Foto -->
     <div class="modal-overlay" id="modalFoto">
@@ -181,6 +394,23 @@
         </div>
     </div>
 
+    <!-- Modal de Impressão/Visualização -->
+    <div class="modal-overlay" id="modalPrint">
+        <div class="modal print-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📄 Visualizar Checklist</h3>
+                <button class="modal-close" onclick="fecharModalPrint()">✕</button>
+            </div>
+            <div class="print-content" id="printContent">
+                <!-- Conteúdo preenchido via JS -->
+            </div>
+            <div class="mt-2" style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="fecharModalPrint()">Fechar</button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="window.print()">🖨️ Imprimir</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
@@ -196,11 +426,14 @@
         let itemFotoAtual = null;
         let itemObsAtual = null;
         let fotoAtualBase64 = null;
+        let modoEdicaoId = null; // ID do checklist sendo editado
+        let autoSaveTimer = null;
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', async () => {
             await DB.init();
             atualizarContadores();
+            carregarHistorico();
         });
 
         // Atualiza contadores de máquinas
@@ -209,6 +442,37 @@
             document.getElementById('qtdColhedoras').textContent = (frota.colhedoras?.length || 0) + ' unid.';
             document.getElementById('qtdTratores').textContent = (frota.tratores?.length || 0) + ' unid.';
             document.getElementById('qtdTransbordos').textContent = (frota.transbordos?.length || 0) + ' unid.';
+        }
+
+        // Carrega histórico de checklists
+        async function carregarHistorico() {
+            const checklists = await DB.buscarChecklists();
+            const container = document.getElementById('listaHistorico');
+
+            if (checklists.length === 0) {
+                container.innerHTML = '<p style="text-align: center; opacity: 0.6;">Nenhum checklist realizado ainda</p>';
+                return;
+            }
+
+            // Mostra últimos 10
+            container.innerHTML = checklists.slice(0, 10).map(c => {
+                const data = new Date(c.data);
+                const problemas = c.itens?.filter(i => i.status === 'problema').length || 0;
+                return `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <h4>${App.getIconeMaquina(c.tipo)} ${c.maquinaNome}</h4>
+                            <p>${data.toLocaleDateString('pt-BR')} às ${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} 
+                               ${problemas > 0 ? `• <span style="color: var(--status-danger);">${problemas} problema(s)</span>` : '• ✅ OK'}</p>
+                        </div>
+                        <div class="history-actions">
+                            <button class="btn-icon btn-print" onclick="event.stopPropagation(); visualizarChecklist(${c.id})" title="Visualizar/Imprimir">📄</button>
+                            <button class="btn-icon btn-edit" onclick="event.stopPropagation(); editarChecklist(${c.id})" title="Editar">✏️</button>
+                            <button class="btn-icon btn-delete" onclick="event.stopPropagation(); deletarChecklist(${c.id})" title="Excluir">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // Etapa 1: Seleciona tipo de máquina
@@ -229,6 +493,9 @@
             const lista = document.getElementById('listaMaquinas');
             lista.innerHTML = '';
 
+            // Busca rascunhos pendentes
+            const rascunhos = DB.listarRascunhos();
+
             if (maquinas.length === 0) {
                 lista.innerHTML = `
                     <div class="empty-state" style="grid-column: span 2;">
@@ -244,10 +511,14 @@
                 const card = document.createElement('div');
                 card.className = 'machine-card';
                 card.onclick = () => selecionarMaquina(m);
+
+                const temRascunho = rascunhos[m.id];
+
                 card.innerHTML = `
-          <div class="machine-icon">${App.getIconeMaquina(m.tipo)}</div>
-          <div class="machine-name">${m.nome}</div>
-        `;
+                    ${temRascunho ? '<span class="pending-badge">PENDENTE</span>' : ''}
+                    <div class="machine-icon">${App.getIconeMaquina(m.tipo)}</div>
+                    <div class="machine-name">${m.nome}</div>
+                `;
                 lista.appendChild(card);
             });
 
@@ -259,18 +530,107 @@
         // Etapa 2: Seleciona máquina específica
         function selecionarMaquina(maquina) {
             maquinaSelecionada = maquina;
+            modoEdicaoId = null;
 
             // Atualiza header da etapa 3
             document.getElementById('iconeMaquinaSelecionada').textContent = App.getIconeMaquina(maquina.tipo);
             document.getElementById('nomeMaquinaSelecionada').textContent = maquina.nome;
             document.getElementById('modeloMaquinaSelecionada').textContent = maquina.modelo;
+            document.getElementById('modoEdicao').textContent = '';
 
-            // Carrega itens do checklist
-            carregarChecklist();
+            // Verifica se há rascunho pendente
+            const rascunho = DB.buscarRascunho(maquina.id);
+            if (rascunho) {
+                if (confirm(`Há um checklist pendente desta máquina (${new Date(rascunho.ultimaAtualizacao).toLocaleString('pt-BR')}). Deseja continuar de onde parou?`)) {
+                    carregarRascunho(rascunho);
+                } else {
+                    DB.removerRascunho(maquina.id);
+                    carregarChecklist();
+                }
+            } else {
+                carregarChecklist();
+            }
 
             // Mostra etapa 3
             document.getElementById('etapa2').classList.add('hidden');
             document.getElementById('etapa3').classList.remove('hidden');
+        }
+
+        // Carrega rascunho salvo
+        function carregarRascunho(rascunho) {
+            const config = CHECKLIST_ITEMS[tipoSelecionado];
+            if (!config) return;
+
+            const container = document.getElementById('categoriasChecklist');
+            container.innerHTML = '';
+
+            // Restaura estado dos itens
+            itensChecklist = {};
+
+            config.categorias.forEach(cat => {
+                const catDiv = document.createElement('div');
+                catDiv.className = 'card';
+                catDiv.innerHTML = `
+                    <h4 class="section-title" style="margin-bottom: 1rem;">
+                        <span class="icon">${cat.icone}</span>
+                        ${cat.nome}
+                    </h4>
+                    <div class="checklist-items" id="cat-${cat.nome.replace(/\s/g, '')}">
+                        ${cat.itens.map(item => {
+                    // Busca estado salvo no rascunho
+                    const itemSalvo = rascunho.itens?.find(i => i.id === item.id) || { status: null, obs: '', fotos: [] };
+                    itensChecklist[item.id] = itemSalvo;
+
+                    const isChecked = itemSalvo.status === 'ok';
+                    const isProblem = itemSalvo.status === 'problema';
+
+                    return `
+                                <div class="checklist-item" id="item-${item.id}">
+                                    <div class="checklist-checkbox ${isChecked ? 'checked' : ''} ${isProblem ? 'problem' : ''}" onclick="toggleItem('${item.id}', this)">
+                                        <span class="check-icon">${isProblem ? '!' : '✓'}</span>
+                                    </div>
+                                    <div class="checklist-content">
+                                        <div class="checklist-title">${item.nome}</div>
+                                        <div class="checklist-description">${item.descricao}</div>
+                                        <div class="checklist-actions">
+                                            <button class="checklist-btn" onclick="marcarProblema('${item.id}')">
+                                                ⚠️ Problema
+                                            </button>
+                                            <button class="checklist-btn" onclick="abrirModalFoto('${item.id}')">
+                                                📷 Foto
+                                            </button>
+                                            <button class="checklist-btn" onclick="abrirModalObs('${item.id}', '${item.nome}')">
+                                                📝 Obs
+                                            </button>
+                                        </div>
+                                        <div class="obs-preview ${itemSalvo.obs ? '' : 'hidden'}" id="obs-${item.id}" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--status-warning);">
+                                            ${itemSalvo.obs ? '📝 ' + itemSalvo.obs : ''}
+                                        </div>
+                                        <div class="fotos-preview" id="fotos-${item.id}" style="margin-top: 0.5rem;">
+                                            ${itemSalvo.fotos?.length ? `
+                                                <div class="photo-gallery">
+                                                    ${itemSalvo.fotos.map((f, i) => `
+                                                        <div class="photo-thumb">
+                                                            <img src="${f.data}" alt="Foto ${i + 1}">
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                }).join('')}
+                    </div>
+                `;
+                container.appendChild(catDiv);
+            });
+
+            // Restaura observações gerais
+            document.getElementById('observacoesGerais').value = rascunho.observacoesGerais || '';
+
+            atualizarProgresso();
+            iniciarAutoSave();
         }
 
         // Carrega checklist baseado no tipo
@@ -326,6 +686,43 @@
             });
 
             atualizarProgresso();
+            iniciarAutoSave();
+        }
+
+        // Inicia auto-save
+        function iniciarAutoSave() {
+            if (autoSaveTimer) clearInterval(autoSaveTimer);
+            autoSaveTimer = setInterval(() => {
+                if (maquinaSelecionada && !modoEdicaoId) {
+                    salvarRascunhoAuto();
+                }
+            }, 30000); // Auto-save a cada 30 segundos
+        }
+
+        // Salva rascunho automaticamente
+        function salvarRascunhoAuto() {
+            const rascunho = {
+                maquinaId: maquinaSelecionada.id,
+                maquinaNome: maquinaSelecionada.nome,
+                tipo: tipoSelecionado,
+                itens: Object.entries(itensChecklist).map(([id, item]) => ({
+                    id,
+                    ...item
+                })),
+                observacoesGerais: document.getElementById('observacoesGerais').value
+            };
+            DB.salvarRascunho(rascunho);
+
+            // Mostra indicador
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        // Salva rascunho manualmente
+        function salvarRascunhoManual() {
+            salvarRascunhoAuto();
+            App.showToast('Rascunho salvo! Você pode continuar depois.', 'success');
         }
 
         // Toggle item OK
@@ -339,6 +736,7 @@
                 item.status = 'ok';
                 checkbox.classList.remove('problem');
                 checkbox.classList.add('checked');
+                checkbox.querySelector('.check-icon').textContent = '✓';
             }
 
             atualizarProgresso();
@@ -352,6 +750,7 @@
             if (item.status === 'problema') {
                 item.status = null;
                 checkbox.classList.remove('problem');
+                checkbox.querySelector('.check-icon').textContent = '✓';
             } else {
                 item.status = 'problema';
                 checkbox.classList.remove('checked');
@@ -460,10 +859,19 @@
 
         // Voltar etapa
         function voltarEtapa(etapa) {
+            // Salva rascunho ao sair
+            if (maquinaSelecionada && !modoEdicaoId) {
+                salvarRascunhoAuto();
+            }
+
             document.getElementById('etapa1').classList.add('hidden');
             document.getElementById('etapa2').classList.add('hidden');
             document.getElementById('etapa3').classList.add('hidden');
             document.getElementById(`etapa${etapa}`).classList.remove('hidden');
+
+            if (etapa === 1) {
+                carregarHistorico();
+            }
         }
 
         // Finaliza checklist
@@ -491,16 +899,141 @@
             };
 
             try {
-                await DB.salvarChecklist(checklist);
-                App.showToast('Checklist salvo com sucesso!', 'success');
+                if (modoEdicaoId) {
+                    // Atualiza checklist existente
+                    checklist.id = modoEdicaoId;
+                    await DB.atualizarChecklist(checklist);
+                    App.showToast('Checklist atualizado com sucesso!', 'success');
+                } else {
+                    // Salva novo checklist
+                    await DB.salvarChecklist(checklist);
+                    // Remove rascunho
+                    DB.removerRascunho(maquinaSelecionada.id);
+                    App.showToast('Checklist salvo com sucesso!', 'success');
+                }
+
+                // Para auto-save
+                if (autoSaveTimer) clearInterval(autoSaveTimer);
 
                 // Volta para a tela inicial após 1.5s
                 setTimeout(() => {
-                    window.location.href = '../index.html';
+                    voltarEtapa(1);
                 }, 1500);
             } catch (error) {
                 console.error('Erro ao salvar:', error);
                 App.showToast('Erro ao salvar checklist', 'error');
+            }
+        }
+
+        // Visualiza checklist para impressão
+        async function visualizarChecklist(id) {
+            const checklist = await DB.buscarChecklistPorId(id);
+            if (!checklist) {
+                App.showToast('Checklist não encontrado', 'error');
+                return;
+            }
+
+            const data = new Date(checklist.data);
+            const config = CHECKLIST_ITEMS[checklist.tipo];
+
+            // Agrupa itens por categoria
+            let conteudoHtml = `
+                <div class="print-header">
+                    <div>
+                        <h1>📋 Checklist de Manutenção</h1>
+                        <p class="print-header-info"><strong>${checklist.maquinaNome}</strong></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p class="print-header-info">${data.toLocaleDateString('pt-BR')}</p>
+                        <p class="print-header-info">${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                </div>
+            `;
+
+            if (config) {
+                config.categorias.forEach(cat => {
+                    conteudoHtml += `<h2>${cat.icone} ${cat.nome}</h2>`;
+                    cat.itens.forEach(item => {
+                        const itemSalvo = checklist.itens?.find(i => i.id === item.id);
+                        const status = itemSalvo?.status || 'pendente';
+                        const statusIcon = status === 'ok' ? '✓' : (status === 'problema' ? '!' : '?');
+
+                        conteudoHtml += `
+                            <div class="print-item">
+                                <div class="status ${status}">${statusIcon}</div>
+                                <div>
+                                    <strong>${item.nome}</strong>
+                                    ${itemSalvo?.obs ? `<div class="obs">📝 ${itemSalvo.obs}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
+            }
+
+            if (checklist.observacoesGerais) {
+                conteudoHtml += `
+                    <h2>📝 Observações Gerais</h2>
+                    <p style="padding: 0.5rem; background: #f5f5f5; border-radius: 4px;">${checklist.observacoesGerais}</p>
+                `;
+            }
+
+            document.getElementById('printContent').innerHTML = conteudoHtml;
+            document.getElementById('modalPrint').classList.add('active');
+        }
+
+        function fecharModalPrint() {
+            document.getElementById('modalPrint').classList.remove('active');
+        }
+
+        // Edita checklist existente
+        async function editarChecklist(id) {
+            const checklist = await DB.buscarChecklistPorId(id);
+            if (!checklist) {
+                App.showToast('Checklist não encontrado', 'error');
+                return;
+            }
+
+            // Configura modo de edição
+            modoEdicaoId = id;
+            tipoSelecionado = checklist.tipo;
+            maquinaSelecionada = {
+                id: checklist.maquina,
+                nome: checklist.maquinaNome,
+                tipo: checklist.tipo,
+                modelo: checklist.tipo === 'colhedora' ? 'CH570' : ''
+            };
+
+            // Atualiza header
+            document.getElementById('iconeMaquinaSelecionada').textContent = App.getIconeMaquina(checklist.tipo);
+            document.getElementById('nomeMaquinaSelecionada').textContent = checklist.maquinaNome;
+            document.getElementById('modeloMaquinaSelecionada').textContent = new Date(checklist.data).toLocaleDateString('pt-BR');
+            document.getElementById('modoEdicao').textContent = '✏️ Modo Edição';
+
+            // Carrega itens salvos
+            const rascunho = {
+                itens: checklist.itens,
+                observacoesGerais: checklist.observacoesGerais
+            };
+            carregarRascunho(rascunho);
+
+            // Mostra etapa 3
+            document.getElementById('etapa1').classList.add('hidden');
+            document.getElementById('etapa3').classList.remove('hidden');
+        }
+
+        // Deleta checklist
+        async function deletarChecklist(id) {
+            if (!confirm('Tem certeza que deseja excluir este checklist? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            try {
+                await DB.deletarChecklist(id);
+                App.showToast('Checklist excluído!', 'success');
+                carregarHistorico();
+            } catch (error) {
+                App.showToast('Erro ao excluir', 'error');
             }
         }
     </script>

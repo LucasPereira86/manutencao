@@ -188,15 +188,72 @@ async function obterEstatisticas() {
     };
 }
 
+// Atualiza um checklist existente
+async function atualizarChecklist(checklist) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['checklists'], 'readwrite');
+        const store = transaction.objectStore('checklists');
+        const request = store.put(checklist);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Deleta um checklist
+async function deletarChecklist(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['checklists'], 'readwrite');
+        const store = transaction.objectStore('checklists');
+        const request = store.delete(id);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Salva rascunho (draft) no localStorage para continuar depois
+function salvarRascunho(rascunho) {
+    const rascunhos = JSON.parse(localStorage.getItem('checklistRascunhos') || '{}');
+    rascunhos[rascunho.maquinaId] = {
+        ...rascunho,
+        ultimaAtualizacao: new Date().toISOString()
+    };
+    localStorage.setItem('checklistRascunhos', JSON.stringify(rascunhos));
+}
+
+// Busca rascunho de uma máquina
+function buscarRascunho(maquinaId) {
+    const rascunhos = JSON.parse(localStorage.getItem('checklistRascunhos') || '{}');
+    return rascunhos[maquinaId] || null;
+}
+
+// Lista todos os rascunhos pendentes
+function listarRascunhos() {
+    return JSON.parse(localStorage.getItem('checklistRascunhos') || '{}');
+}
+
+// Remove rascunho
+function removerRascunho(maquinaId) {
+    const rascunhos = JSON.parse(localStorage.getItem('checklistRascunhos') || '{}');
+    delete rascunhos[maquinaId];
+    localStorage.setItem('checklistRascunhos', JSON.stringify(rascunhos));
+}
+
 // Exporta funções
 window.DB = {
     init: initDB,
     salvarChecklist,
     buscarChecklists,
     buscarChecklistPorId,
+    atualizarChecklist,
+    deletarChecklist,
     salvarFoto,
     buscarFotosChecklist,
     salvarDiagnostico,
     buscarDiagnosticos,
-    obterEstatisticas
+    obterEstatisticas,
+    salvarRascunho,
+    buscarRascunho,
+    listarRascunhos,
+    removerRascunho
 };
+
