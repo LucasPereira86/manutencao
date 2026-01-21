@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#16213e">
+  <meta name="description" content="Sistema de gestão de manutenção para máquinas agrícolas">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <title>Manutenção de Campo</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div>
+        <h1 class="app-title">Manutenção de Campo</h1>
+        <p class="app-subtitle" id="currentDate"></p>
+      </div>
+      <div class="app-logo">🔧</div>
+    </header>
+
+    <!-- Menu Principal -->
+    <main id="mainContent">
+      <!-- Card Checklist -->
+      <div class="card card-clickable" onclick="navigateTo('checklist')">
+        <div class="card-header">
+          <div class="card-icon checklist">📋</div>
+          <div>
+            <h2 class="card-title">Checklist</h2>
+            <p class="card-description">Inspeção diária das máquinas</p>
+          </div>
+        </div>
+        <div class="stats-mini" id="checklistStats">
+          <span class="status-badge info">Carregando...</span>
+        </div>
+      </div>
+
+      <!-- Card Dashboard -->
+      <div class="card card-clickable" onclick="navigateTo('dashboard')">
+        <div class="card-header">
+          <div class="card-icon dashboard">📊</div>
+          <div>
+            <h2 class="card-title">Dashboard</h2>
+            <p class="card-description">Status da frota e relatórios</p>
+          </div>
+        </div>
+        <div class="stats-mini" id="dashboardStats">
+          <span class="status-badge ok">Carregando...</span>
+        </div>
+      </div>
+
+      <!-- Card Diagnóstico -->
+      <div class="card card-clickable" onclick="navigateTo('diagnostico')">
+        <div class="card-header">
+          <div class="card-icon diagnostico">🔍</div>
+          <div>
+            <h2 class="card-title">Diagnóstico</h2>
+            <p class="card-description">Guia de solução de problemas</p>
+          </div>
+        </div>
+        <div class="stats-mini">
+          <span class="status-badge warning">Encontre soluções rápidas</span>
+        </div>
+      </div>
+
+      <!-- Card Manuais -->
+      <div class="card card-clickable" onclick="navigateTo('manuais')">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">📚</div>
+          <div>
+            <h2 class="card-title">Manuais</h2>
+            <p class="card-description">Documentação técnica CH570</p>
+          </div>
+        </div>
+        <div class="stats-mini">
+          <span class="status-badge info">16 documentos</span>
+        </div>
+      </div>
+
+      <!-- Card Gerenciar Frota -->
+      <div class="card card-clickable" onclick="navigateTo('frota')">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">⚙️</div>
+          <div>
+            <h2 class="card-title">Gerenciar Frota</h2>
+            <p class="card-description">Adicionar e remover máquinas</p>
+          </div>
+        </div>
+        <div class="stats-mini">
+          <span class="status-badge info">Configurar equipamentos</span>
+        </div>
+      </div>
+
+      <!-- Resumo Rápido -->
+      <section class="mt-3">
+        <h3 class="section-title">
+          <span class="icon">📈</span>
+          Resumo do Dia
+        </h3>
+        <div class="stats-grid" id="dailyStats">
+          <div class="stat-card">
+            <div class="stat-value ok" id="statOk">-</div>
+            <div class="stat-label">OK</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value warning" id="statPendente">-</div>
+            <div class="stat-label">Pendentes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value danger" id="statProblema">-</div>
+            <div class="stat-label">Problemas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTotal">-</div>
+            <div class="stat-label">Total Hoje</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item active">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Início</span>
+      </a>
+      <a href="pages/checklist.html" class="nav-item">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Checklist</span>
+      </a>
+      <a href="pages/manuais.html" class="nav-item">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Manuais</span>
+      </a>
+      <a href="pages/diagnostico.html" class="nav-item">
+        <span class="nav-icon">🔍</span>
+        <span class="nav-label">Diagnóstico</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Atualiza data atual
+    document.getElementById('currentDate').textContent =
+      new Date().toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      });
+
+    // Carrega estatísticas ao iniciar
+    document.addEventListener('DOMContentLoaded', async () => {
+      await DB.init();
+      await carregarEstatisticas();
+    });
+
+    async function carregarEstatisticas() {
+      try {
+        const stats = await DB.obterEstatisticas();
+        const checklists = await DB.buscarChecklists();
+
+        // Filtra checklists de hoje
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const checklistsHoje = checklists.filter(c => {
+          const data = new Date(c.data);
+          data.setHours(0, 0, 0, 0);
+          return data.getTime() === hoje.getTime();
+        });
+
+        // Conta status
+        let ok = 0, problemas = 0;
+        checklistsHoje.forEach(c => {
+          if (c.itens) {
+            const temProblema = c.itens.some(i => i.status === 'problema');
+            if (temProblema) problemas++;
+            else ok++;
+          }
+        });
+
+        // Total de máquinas (dinâmico)
+        const totalMaquinas = App.contarMaquinas();
+
+        // Atualiza UI
+        document.getElementById('statOk').textContent = ok;
+        document.getElementById('statProblema').textContent = problemas;
+        document.getElementById('statPendente').textContent = Math.max(0, totalMaquinas - checklistsHoje.length);
+        document.getElementById('statTotal').textContent = checklistsHoje.length;
+
+        // Atualiza badge do dashboard
+        const dashboardStats = document.getElementById('dashboardStats');
+        if (totalMaquinas === 0) {
+          dashboardStats.innerHTML = '<span class="status-badge warning">Cadastre máquinas</span>';
+        } else {
+          dashboardStats.innerHTML = `<span class="status-badge ok">${totalMaquinas} máquinas</span>`;
+        }
+
+        // Atualiza badge do checklist
+        const checklistStats = document.getElementById('checklistStats');
+        if (checklistsHoje.length === 0) {
+          checklistStats.innerHTML = '<span class="status-badge warning">Nenhum checklist hoje</span>';
+        } else {
+          checklistStats.innerHTML = `<span class="status-badge ok">${checklistsHoje.length} realizados hoje</span>`;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+      }
+    }
+
+    function navigateTo(page) {
+      window.location.href = `pages/${page}.html`;
+    }
+  </script>
+</body>
+
+</html>

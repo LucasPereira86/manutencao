@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#16213e">
+    <title>Checklist - Manutenção de Campo</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div>
+                <h1 class="app-title">📋 Checklist</h1>
+                <p class="app-subtitle">Inspeção diária de máquinas</p>
+            </div>
+        </header>
+
+        <!-- Etapa 1: Seleção de Tipo de Máquina -->
+        <section id="etapa1">
+            <h3 class="section-title">Selecione o tipo de máquina</h3>
+
+            <div class="grid-3" id="tiposMaquinas">
+                <div class="machine-card" onclick="selecionarTipo('colhedora')">
+                    <div class="machine-icon">🚜</div>
+                    <div class="machine-name">Colhedora</div>
+                    <div class="machine-status">
+                        <span class="status-badge info" id="qtdColhedoras">-</span>
+                    </div>
+                </div>
+
+                <div class="machine-card" onclick="selecionarTipo('trator')">
+                    <div class="machine-icon">🚛</div>
+                    <div class="machine-name">Trator</div>
+                    <div class="machine-status">
+                        <span class="status-badge info" id="qtdTratores">-</span>
+                    </div>
+                </div>
+
+                <div class="machine-card" onclick="selecionarTipo('transbordo')">
+                    <div class="machine-icon">🚚</div>
+                    <div class="machine-name">Transbordo</div>
+                    <div class="machine-status">
+                        <span class="status-badge info" id="qtdTransbordos">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 text-center">
+                <a href="frota.html" style="color: var(--accent-secondary); font-size: 0.9rem;">
+                    ⚙️ Gerenciar máquinas
+                </a>
+            </div>
+        </section>
+
+        <!-- Etapa 2: Seleção de Máquina Específica -->
+        <section id="etapa2" class="hidden">
+            <button class="back-btn" onclick="voltarEtapa(1)">
+                ← Voltar
+            </button>
+
+            <h3 class="section-title" id="tituloMaquinas">Selecione a máquina</h3>
+
+            <div id="listaMaquinas" class="grid-2">
+                <!-- Preenchido via JS -->
+            </div>
+        </section>
+
+        <!-- Etapa 3: Checklist -->
+        <section id="etapa3" class="hidden">
+            <button class="back-btn" onclick="voltarEtapa(2)">
+                ← Voltar
+            </button>
+
+            <div class="card" style="background: var(--accent-gradient); margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 2.5rem;" id="iconeMaquinaSelecionada">🚜</span>
+                    <div>
+                        <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;" id="nomeMaquinaSelecionada">Colhedora 01
+                        </h2>
+                        <p style="opacity: 0.8; font-size: 0.9rem;" id="modeloMaquinaSelecionada">CH570</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="progressoChecklist" class="card" style="margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Progresso</span>
+                    <span id="progressoTexto">0 / 0</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+                    <div id="progressoBarra"
+                        style="height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.3s;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="categoriasChecklist">
+                <!-- Preenchido via JS -->
+            </div>
+
+            <div class="form-group mt-3">
+                <label class="form-label">Observações Gerais</label>
+                <textarea id="observacoesGerais" class="form-textarea"
+                    placeholder="Descreva observações adicionais..."></textarea>
+            </div>
+
+            <div class="mt-3">
+                <button class="btn btn-success btn-block btn-large" onclick="finalizarChecklist()">
+                    ✅ Finalizar Checklist
+                </button>
+            </div>
+        </section>
+
+        <!-- Navegação Inferior -->
+        <nav class="bottom-nav">
+            <a href="../index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Início</span>
+            </a>
+            <a href="checklist.html" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Checklist</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="diagnostico.html" class="nav-item">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">Diagnóstico</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Modal de Foto -->
+    <div class="modal-overlay" id="modalFoto">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📸 Adicionar Foto</h3>
+                <button class="modal-close" onclick="fecharModalFoto()">✕</button>
+            </div>
+            <div class="photo-capture">
+                <div class="photo-preview" id="fotoPreview">
+                    <span>Nenhuma foto</span>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="tirarFoto()">
+                    📷 Tirar Foto
+                </button>
+            </div>
+            <div class="form-group mt-2">
+                <label class="form-label">Descrição da foto</label>
+                <input type="text" class="form-input" id="fotoDescricao" placeholder="Ex: Vazamento no cilindro">
+            </div>
+            <div class="mt-2" style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="fecharModalFoto()">Cancelar</button>
+                <button class="btn btn-success" style="flex: 1;" onclick="salvarFoto()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Observação -->
+    <div class="modal-overlay" id="modalObs">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📝 Observação</h3>
+                <button class="modal-close" onclick="fecharModalObs()">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" id="labelItemObs">Item</label>
+                <textarea class="form-textarea" id="textoObs"
+                    placeholder="Descreva o problema ou observação..."></textarea>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="fecharModalObs()">Cancelar</button>
+                <button class="btn btn-success" style="flex: 1;" onclick="salvarObs()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/checklist.js"></script>
+    <script>
+        // Estado do checklist
+        let tipoSelecionado = null;
+        let maquinaSelecionada = null;
+        let itensChecklist = {};
+        let fotosChecklist = [];
+        let itemFotoAtual = null;
+        let itemObsAtual = null;
+        let fotoAtualBase64 = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            await DB.init();
+            atualizarContadores();
+        });
+
+        // Atualiza contadores de máquinas
+        function atualizarContadores() {
+            const frota = App.getMaquinas();
+            document.getElementById('qtdColhedoras').textContent = (frota.colhedoras?.length || 0) + ' unid.';
+            document.getElementById('qtdTratores').textContent = (frota.tratores?.length || 0) + ' unid.';
+            document.getElementById('qtdTransbordos').textContent = (frota.transbordos?.length || 0) + ' unid.';
+        }
+
+        // Etapa 1: Seleciona tipo de máquina
+        function selecionarTipo(tipo) {
+            tipoSelecionado = tipo;
+
+            // Atualiza título
+            const titulos = {
+                colhedora: 'Selecione a Colhedora',
+                trator: 'Selecione o Trator',
+                transbordo: 'Selecione o Transbordo'
+            };
+            document.getElementById('tituloMaquinas').textContent = titulos[tipo];
+
+            // Preenche lista de máquinas
+            const frota = App.getMaquinas();
+            const maquinas = frota[tipo + 's'] || frota[tipo + 'es'] || [];
+            const lista = document.getElementById('listaMaquinas');
+            lista.innerHTML = '';
+
+            if (maquinas.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-state" style="grid-column: span 2;">
+                        <div class="icon">🚜</div>
+                        <h3>Nenhuma máquina cadastrada</h3>
+                        <p><a href="frota.html" style="color: var(--accent-secondary);">Clique aqui para adicionar</a></p>
+                    </div>
+                `;
+                return;
+            }
+
+            maquinas.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'machine-card';
+                card.onclick = () => selecionarMaquina(m);
+                card.innerHTML = `
+          <div class="machine-icon">${App.getIconeMaquina(m.tipo)}</div>
+          <div class="machine-name">${m.nome}</div>
+        `;
+                lista.appendChild(card);
+            });
+
+            // Mostra etapa 2
+            document.getElementById('etapa1').classList.add('hidden');
+            document.getElementById('etapa2').classList.remove('hidden');
+        }
+
+        // Etapa 2: Seleciona máquina específica
+        function selecionarMaquina(maquina) {
+            maquinaSelecionada = maquina;
+
+            // Atualiza header da etapa 3
+            document.getElementById('iconeMaquinaSelecionada').textContent = App.getIconeMaquina(maquina.tipo);
+            document.getElementById('nomeMaquinaSelecionada').textContent = maquina.nome;
+            document.getElementById('modeloMaquinaSelecionada').textContent = maquina.modelo;
+
+            // Carrega itens do checklist
+            carregarChecklist();
+
+            // Mostra etapa 3
+            document.getElementById('etapa2').classList.add('hidden');
+            document.getElementById('etapa3').classList.remove('hidden');
+        }
+
+        // Carrega checklist baseado no tipo
+        function carregarChecklist() {
+            const config = CHECKLIST_ITEMS[tipoSelecionado];
+            if (!config) return;
+
+            const container = document.getElementById('categoriasChecklist');
+            container.innerHTML = '';
+
+            // Inicializa estado dos itens
+            itensChecklist = {};
+
+            config.categorias.forEach(cat => {
+                const catDiv = document.createElement('div');
+                catDiv.className = 'card';
+                catDiv.innerHTML = `
+          <h4 class="section-title" style="margin-bottom: 1rem;">
+            <span class="icon">${cat.icone}</span>
+            ${cat.nome}
+          </h4>
+          <div class="checklist-items" id="cat-${cat.nome.replace(/\s/g, '')}">
+            ${cat.itens.map(item => {
+                    itensChecklist[item.id] = { status: null, obs: '', fotos: [] };
+                    return `
+                <div class="checklist-item" id="item-${item.id}">
+                  <div class="checklist-checkbox" onclick="toggleItem('${item.id}', this)">
+                    <span class="check-icon">✓</span>
+                  </div>
+                  <div class="checklist-content">
+                    <div class="checklist-title">${item.nome}</div>
+                    <div class="checklist-description">${item.descricao}</div>
+                    <div class="checklist-actions">
+                      <button class="checklist-btn" onclick="marcarProblema('${item.id}')">
+                        ⚠️ Problema
+                      </button>
+                      <button class="checklist-btn" onclick="abrirModalFoto('${item.id}')">
+                        📷 Foto
+                      </button>
+                      <button class="checklist-btn" onclick="abrirModalObs('${item.id}', '${item.nome}')">
+                        📝 Obs
+                      </button>
+                    </div>
+                    <div class="obs-preview hidden" id="obs-${item.id}" style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--status-warning);"></div>
+                    <div class="fotos-preview" id="fotos-${item.id}" style="margin-top: 0.5rem;"></div>
+                  </div>
+                </div>
+              `;
+                }).join('')}
+          </div>
+        `;
+                container.appendChild(catDiv);
+            });
+
+            atualizarProgresso();
+        }
+
+        // Toggle item OK
+        function toggleItem(itemId, checkbox) {
+            const item = itensChecklist[itemId];
+
+            if (item.status === 'ok') {
+                item.status = null;
+                checkbox.classList.remove('checked');
+            } else {
+                item.status = 'ok';
+                checkbox.classList.remove('problem');
+                checkbox.classList.add('checked');
+            }
+
+            atualizarProgresso();
+        }
+
+        // Marca como problema
+        function marcarProblema(itemId) {
+            const item = itensChecklist[itemId];
+            const checkbox = document.querySelector(`#item-${itemId} .checklist-checkbox`);
+
+            if (item.status === 'problema') {
+                item.status = null;
+                checkbox.classList.remove('problem');
+            } else {
+                item.status = 'problema';
+                checkbox.classList.remove('checked');
+                checkbox.classList.add('problem');
+                checkbox.querySelector('.check-icon').textContent = '!';
+
+                // Abre modal de observação automaticamente
+                abrirModalObs(itemId, document.querySelector(`#item-${itemId} .checklist-title`).textContent);
+            }
+
+            atualizarProgresso();
+        }
+
+        // Atualiza barra de progresso
+        function atualizarProgresso() {
+            const total = Object.keys(itensChecklist).length;
+            const preenchidos = Object.values(itensChecklist).filter(i => i.status !== null).length;
+
+            document.getElementById('progressoTexto').textContent = `${preenchidos} / ${total}`;
+            document.getElementById('progressoBarra').style.width = `${(preenchidos / total) * 100}%`;
+        }
+
+        // Modal de Foto
+        function abrirModalFoto(itemId) {
+            itemFotoAtual = itemId;
+            fotoAtualBase64 = null;
+            document.getElementById('fotoPreview').innerHTML = '<span>Nenhuma foto</span>';
+            document.getElementById('fotoDescricao').value = '';
+            document.getElementById('modalFoto').classList.add('active');
+        }
+
+        function fecharModalFoto() {
+            document.getElementById('modalFoto').classList.remove('active');
+            itemFotoAtual = null;
+        }
+
+        async function tirarFoto() {
+            try {
+                const foto = await App.capturarFoto();
+                fotoAtualBase64 = await App.comprimirImagem(foto);
+                document.getElementById('fotoPreview').innerHTML = `<img src="${fotoAtualBase64}" alt="Foto">`;
+            } catch (error) {
+                App.showToast('Erro ao capturar foto', 'error');
+            }
+        }
+
+        function salvarFoto() {
+            if (!fotoAtualBase64) {
+                App.showToast('Tire uma foto primeiro', 'warning');
+                return;
+            }
+
+            const descricao = document.getElementById('fotoDescricao').value;
+
+            itensChecklist[itemFotoAtual].fotos.push({
+                data: fotoAtualBase64,
+                descricao: descricao,
+                timestamp: new Date().toISOString()
+            });
+
+            // Atualiza preview
+            const previewContainer = document.getElementById(`fotos-${itemFotoAtual}`);
+            previewContainer.innerHTML = `
+        <div class="photo-gallery">
+          ${itensChecklist[itemFotoAtual].fotos.map((f, i) => `
+            <div class="photo-thumb">
+              <img src="${f.data}" alt="Foto ${i + 1}">
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+            fecharModalFoto();
+            App.showToast('Foto salva!', 'success');
+        }
+
+        // Modal de Observação
+        function abrirModalObs(itemId, itemNome) {
+            itemObsAtual = itemId;
+            document.getElementById('labelItemObs').textContent = itemNome;
+            document.getElementById('textoObs').value = itensChecklist[itemId].obs || '';
+            document.getElementById('modalObs').classList.add('active');
+        }
+
+        function fecharModalObs() {
+            document.getElementById('modalObs').classList.remove('active');
+            itemObsAtual = null;
+        }
+
+        function salvarObs() {
+            const obs = document.getElementById('textoObs').value;
+            itensChecklist[itemObsAtual].obs = obs;
+
+            // Atualiza preview
+            const obsPreview = document.getElementById(`obs-${itemObsAtual}`);
+            if (obs) {
+                obsPreview.textContent = `📝 ${obs}`;
+                obsPreview.classList.remove('hidden');
+            } else {
+                obsPreview.classList.add('hidden');
+            }
+
+            fecharModalObs();
+            App.showToast('Observação salva!', 'success');
+        }
+
+        // Voltar etapa
+        function voltarEtapa(etapa) {
+            document.getElementById('etapa1').classList.add('hidden');
+            document.getElementById('etapa2').classList.add('hidden');
+            document.getElementById('etapa3').classList.add('hidden');
+            document.getElementById(`etapa${etapa}`).classList.remove('hidden');
+        }
+
+        // Finaliza checklist
+        async function finalizarChecklist() {
+            // Verifica se todos os itens foram preenchidos
+            const naoPreenchidos = Object.values(itensChecklist).filter(i => i.status === null).length;
+
+            if (naoPreenchidos > 0) {
+                if (!confirm(`Ainda há ${naoPreenchidos} itens não verificados. Deseja continuar mesmo assim?`)) {
+                    return;
+                }
+            }
+
+            // Monta objeto do checklist
+            const checklist = {
+                maquina: maquinaSelecionada.id,
+                maquinaNome: maquinaSelecionada.nome,
+                tipo: tipoSelecionado,
+                data: new Date().toISOString(),
+                itens: Object.entries(itensChecklist).map(([id, item]) => ({
+                    id,
+                    ...item
+                })),
+                observacoesGerais: document.getElementById('observacoesGerais').value
+            };
+
+            try {
+                await DB.salvarChecklist(checklist);
+                App.showToast('Checklist salvo com sucesso!', 'success');
+
+                // Volta para a tela inicial após 1.5s
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 1500);
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                App.showToast('Erro ao salvar checklist', 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>

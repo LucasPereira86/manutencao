@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#16213e">
+    <title>Gerenciar Frota - Manutenção de Campo</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .frota-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .frota-item .icon {
+            font-size: 1.75rem;
+        }
+
+        .frota-item .info {
+            flex: 1;
+        }
+
+        .frota-item .nome {
+            font-weight: 600;
+        }
+
+        .frota-item .modelo {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .frota-item .delete-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            color: var(--status-danger);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .frota-item .delete-btn:hover {
+            background: var(--status-danger);
+            color: white;
+        }
+
+        .add-form {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contador {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1.5rem;
+        }
+
+        .contador-item {
+            text-align: center;
+        }
+
+        .contador-valor {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .contador-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div>
+                <h1 class="app-title">⚙️ Gerenciar Frota</h1>
+                <p class="app-subtitle">Adicionar e remover máquinas</p>
+            </div>
+        </header>
+
+        <!-- Contador -->
+        <div class="contador" id="contadorFrota">
+            <div class="contador-item">
+                <div class="contador-valor" id="qtdColhedoras">0</div>
+                <div class="contador-label">Colhedoras</div>
+            </div>
+            <div class="contador-item">
+                <div class="contador-valor" id="qtdTratores">0</div>
+                <div class="contador-label">Tratores</div>
+            </div>
+            <div class="contador-item">
+                <div class="contador-valor" id="qtdTransbordos">0</div>
+                <div class="contador-label">Transbordos</div>
+            </div>
+        </div>
+
+        <!-- Formulário para adicionar -->
+        <div class="add-form">
+            <h3 class="section-title mb-2">➕ Adicionar Máquina</h3>
+
+            <div class="form-group">
+                <label class="form-label">Tipo de Máquina</label>
+                <select id="novoTipo" class="form-select">
+                    <option value="colhedora">Colhedora</option>
+                    <option value="trator">Trator</option>
+                    <option value="transbordo">Transbordo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nome / Identificação</label>
+                <input type="text" id="novoNome" class="form-input" placeholder="Ex: Colhedora 08, Trator Azul, etc.">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Modelo</label>
+                <input type="text" id="novoModelo" class="form-input" placeholder="Ex: CH570, John Deere 7200, etc.">
+            </div>
+
+            <button class="btn btn-success btn-block" onclick="adicionarMaquina()">
+                ➕ Adicionar Máquina
+            </button>
+        </div>
+
+        <!-- Tabs por tipo -->
+        <div class="tabs">
+            <div class="tab active" onclick="trocarTab('todos', this)">Todos</div>
+            <div class="tab" onclick="trocarTab('colhedora', this)">Colhedoras</div>
+            <div class="tab" onclick="trocarTab('trator', this)">Tratores</div>
+            <div class="tab" onclick="trocarTab('transbordo', this)">Transbordos</div>
+        </div>
+
+        <!-- Lista de máquinas -->
+        <div id="listaMaquinas">
+            <!-- Preenchido via JS -->
+        </div>
+
+        <!-- Navegação Inferior -->
+        <nav class="bottom-nav">
+            <a href="../index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Início</span>
+            </a>
+            <a href="checklist.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Checklist</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="frota.html" class="nav-item active">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Frota</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Modal Confirmar Exclusão -->
+    <div class="modal-overlay" id="modalConfirmar">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">⚠️ Confirmar Exclusão</h3>
+                <button class="modal-close" onclick="fecharModal()">✕</button>
+            </div>
+            <p id="textoConfirmacao">Deseja realmente excluir esta máquina?</p>
+            <div class="mt-2" style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="fecharModal()">Cancelar</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        let filtroAtual = 'todos';
+        let maquinaParaExcluir = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            await DB.init();
+            await carregarFrotaDoStorage();
+            renderizarLista();
+            atualizarContadores();
+        });
+
+        // Carrega frota do localStorage (permite persistir edições)
+        async function carregarFrotaDoStorage() {
+            const frotaSalva = localStorage.getItem('frota_customizada');
+            if (frotaSalva) {
+                const frota = JSON.parse(frotaSalva);
+                // Atualiza o objeto global
+                window.FROTA_DINAMICA = frota;
+            } else {
+                // Primeira vez - usa dados padrão do app.js
+                window.FROTA_DINAMICA = {
+                    colhedoras: [...App.MAQUINAS.colhedoras],
+                    tratores: [...App.MAQUINAS.tratores],
+                    transbordos: [...App.MAQUINAS.transbordos]
+                };
+                salvarFrota();
+            }
+        }
+
+        // Salva frota no localStorage
+        function salvarFrota() {
+            localStorage.setItem('frota_customizada', JSON.stringify(window.FROTA_DINAMICA));
+            // Atualiza também o objeto App para uso em outras páginas
+            if (window.App) {
+                App.MAQUINAS = window.FROTA_DINAMICA;
+                App.TODAS_MAQUINAS = [
+                    ...window.FROTA_DINAMICA.colhedoras,
+                    ...window.FROTA_DINAMICA.tratores,
+                    ...window.FROTA_DINAMICA.transbordos
+                ];
+            }
+        }
+
+        // Atualiza contadores
+        function atualizarContadores() {
+            document.getElementById('qtdColhedoras').textContent = window.FROTA_DINAMICA.colhedoras.length;
+            document.getElementById('qtdTratores').textContent = window.FROTA_DINAMICA.tratores.length;
+            document.getElementById('qtdTransbordos').textContent = window.FROTA_DINAMICA.transbordos.length;
+        }
+
+        // Renderiza lista de máquinas
+        function renderizarLista() {
+            const container = document.getElementById('listaMaquinas');
+            container.innerHTML = '';
+
+            let maquinas = [];
+            if (filtroAtual === 'todos') {
+                maquinas = [
+                    ...window.FROTA_DINAMICA.colhedoras,
+                    ...window.FROTA_DINAMICA.tratores,
+                    ...window.FROTA_DINAMICA.transbordos
+                ];
+            } else if (filtroAtual === 'colhedora') {
+                maquinas = window.FROTA_DINAMICA.colhedoras;
+            } else if (filtroAtual === 'trator') {
+                maquinas = window.FROTA_DINAMICA.tratores;
+            } else if (filtroAtual === 'transbordo') {
+                maquinas = window.FROTA_DINAMICA.transbordos;
+            }
+
+            if (maquinas.length === 0) {
+                container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🚜</div>
+            <h3>Nenhuma máquina cadastrada</h3>
+            <p>Use o formulário acima para adicionar</p>
+          </div>
+        `;
+                return;
+            }
+
+            maquinas.forEach(m => {
+                const item = document.createElement('div');
+                item.className = 'frota-item';
+                item.innerHTML = `
+          <span class="icon">${getIcone(m.tipo)}</span>
+          <div class="info">
+            <div class="nome">${m.nome}</div>
+            <div class="modelo">${m.modelo}</div>
+          </div>
+          <button class="delete-btn" onclick="abrirModalExcluir('${m.id}', '${m.nome}')">🗑️</button>
+        `;
+                container.appendChild(item);
+            });
+        }
+
+        // Ícone por tipo
+        function getIcone(tipo) {
+            const icones = { colhedora: '🚜', trator: '🚛', transbordo: '🚚' };
+            return icones[tipo] || '🔧';
+        }
+
+        // Trocar tab
+        function trocarTab(tipo, elemento) {
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            elemento.classList.add('active');
+            filtroAtual = tipo;
+            renderizarLista();
+        }
+
+        // Adicionar máquina
+        function adicionarMaquina() {
+            const tipo = document.getElementById('novoTipo').value;
+            const nome = document.getElementById('novoNome').value.trim();
+            const modelo = document.getElementById('novoModelo').value.trim();
+
+            if (!nome) {
+                showToast('Informe o nome da máquina', 'warning');
+                return;
+            }
+
+            // Gera ID único
+            const id = `${tipo.toUpperCase()}-${Date.now()}`;
+
+            const novaMaquina = {
+                id,
+                nome,
+                modelo: modelo || tipo.charAt(0).toUpperCase() + tipo.slice(1),
+                tipo
+            };
+
+            // Adiciona na lista correta
+            if (tipo === 'colhedora') {
+                window.FROTA_DINAMICA.colhedoras.push(novaMaquina);
+            } else if (tipo === 'trator') {
+                window.FROTA_DINAMICA.tratores.push(novaMaquina);
+            } else {
+                window.FROTA_DINAMICA.transbordos.push(novaMaquina);
+            }
+
+            salvarFrota();
+            renderizarLista();
+            atualizarContadores();
+
+            // Limpa formulário
+            document.getElementById('novoNome').value = '';
+            document.getElementById('novoModelo').value = '';
+
+            showToast(`${nome} adicionada com sucesso!`, 'success');
+        }
+
+        // Modal de exclusão
+        function abrirModalExcluir(id, nome) {
+            maquinaParaExcluir = id;
+            document.getElementById('textoConfirmacao').textContent = `Deseja realmente excluir "${nome}"?`;
+            document.getElementById('modalConfirmar').classList.add('active');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalConfirmar').classList.remove('active');
+            maquinaParaExcluir = null;
+        }
+
+        function confirmarExclusao() {
+            if (!maquinaParaExcluir) return;
+
+            // Remove de todas as listas
+            window.FROTA_DINAMICA.colhedoras = window.FROTA_DINAMICA.colhedoras.filter(m => m.id !== maquinaParaExcluir);
+            window.FROTA_DINAMICA.tratores = window.FROTA_DINAMICA.tratores.filter(m => m.id !== maquinaParaExcluir);
+            window.FROTA_DINAMICA.transbordos = window.FROTA_DINAMICA.transbordos.filter(m => m.id !== maquinaParaExcluir);
+
+            salvarFrota();
+            renderizarLista();
+            atualizarContadores();
+            fecharModal();
+
+            showToast('Máquina removida!', 'success');
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: '✅', error: '❌', warning: '⚠️' };
+            toast.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+
+</html>

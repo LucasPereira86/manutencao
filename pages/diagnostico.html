@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#16213e">
+    <title>Diagnóstico - Manutenção de Campo</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .sistema-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .sistema-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateX(4px);
+        }
+
+        .sistema-icon {
+            font-size: 2rem;
+            width: 48px;
+            text-align: center;
+        }
+
+        .sistema-info {
+            flex: 1;
+        }
+
+        .sistema-nome {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sistema-qtd {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .problema-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border-left: 4px solid var(--status-warning);
+        }
+
+        .problema-card:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .problema-sintoma {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .pergunta-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pergunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .opcao-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .opcao-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .solucao-container {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%);
+            border: 2px solid var(--status-ok);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .solucao-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .solucao-header h3 {
+            color: var(--status-ok);
+            margin: 0;
+        }
+
+        .solucao-passos {
+            list-style: none;
+        }
+
+        .solucao-passo {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .solucao-passo:last-child {
+            border-bottom: none;
+        }
+
+        .passo-numero {
+            width: 28px;
+            height: 28px;
+            background: var(--status-ok);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .passo-texto {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '›';
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--accent-secondary);
+            cursor: pointer;
+        }
+
+        .breadcrumb-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div>
+                <h1 class="app-title">🔍 Diagnóstico</h1>
+                <p class="app-subtitle">Encontre soluções rápidas</p>
+            </div>
+        </header>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="breadcrumb-item">Início</span>
+        </div>
+
+        <!-- Conteúdo dinâmico -->
+        <main id="conteudo">
+            <!-- Preenchido via JS -->
+        </main>
+
+        <!-- Navegação Inferior -->
+        <nav class="bottom-nav">
+            <a href="../index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Início</span>
+            </a>
+            <a href="checklist.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Checklist</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="diagnostico.html" class="nav-item active">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">Diagnóstico</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/diagnostico.js"></script>
+    <script>
+        // Estado da navegação
+        let navegacao = [];
+        let sistemaAtual = null;
+        let problemaAtual = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            mostrarSistemas();
+        });
+
+        // Atualiza breadcrumb
+        function atualizarBreadcrumb() {
+            const container = document.getElementById('breadcrumb');
+            container.innerHTML = '';
+
+            // Item inicial
+            const inicio = document.createElement('span');
+            inicio.className = 'breadcrumb-item';
+            if (navegacao.length > 0) {
+                inicio.innerHTML = '<span class="breadcrumb-link" onclick="voltarInicio()">Sistemas</span>';
+            } else {
+                inicio.textContent = 'Sistemas';
+            }
+            container.appendChild(inicio);
+
+            // Itens de navegação
+            navegacao.forEach((item, index) => {
+                const span = document.createElement('span');
+                span.className = 'breadcrumb-item';
+
+                if (index < navegacao.length - 1) {
+                    span.innerHTML = `<span class="breadcrumb-link" onclick="voltarPara(${index})">${item.nome}</span>`;
+                } else {
+                    span.textContent = item.nome;
+                }
+
+                container.appendChild(span);
+            });
+        }
+
+        // Mostra lista de sistemas
+        function mostrarSistemas() {
+            navegacao = [];
+            sistemaAtual = null;
+            problemaAtual = null;
+            atualizarBreadcrumb();
+
+            const container = document.getElementById('conteudo');
+            container.innerHTML = `
+        <h3 class="section-title">Selecione o sistema com problema</h3>
+        ${DIAGNOSTICOS.sistemas.map(s => `
+          <div class="sistema-card" onclick="selecionarSistema('${s.id}')">
+            <div class="sistema-icon">${s.icone}</div>
+            <div class="sistema-info">
+              <div class="sistema-nome">${s.nome}</div>
+              <div class="sistema-qtd">${s.problemas.length} problemas catalogados</div>
+            </div>
+            <span style="color: var(--text-muted);">›</span>
+          </div>
+        `).join('')}
+      `;
+        }
+
+        // Seleciona um sistema
+        function selecionarSistema(sistemaId) {
+            sistemaAtual = DIAGNOSTICOS.sistemas.find(s => s.id === sistemaId);
+            if (!sistemaAtual) return;
+
+            navegacao = [{ id: sistemaId, nome: sistemaAtual.nome }];
+            atualizarBreadcrumb();
+
+            const container = document.getElementById('conteudo');
+            container.innerHTML = `
+        <button class="back-btn" onclick="voltarInicio()">← Voltar</button>
+        
+        <h3 class="section-title">
+          <span class="icon">${sistemaAtual.icone}</span>
+          ${sistemaAtual.nome}
+        </h3>
+        <p class="text-muted mb-2">Qual é o sintoma?</p>
+        
+        ${sistemaAtual.problemas.map(p => `
+          <div class="problema-card" onclick="selecionarProblema('${p.id}')">
+            <div class="problema-sintoma">⚠️ ${p.sintoma}</div>
+          </div>
+        `).join('')}
+      `;
+        }
+
+        // Seleciona um problema
+        function selecionarProblema(problemaId) {
+            problemaAtual = sistemaAtual.problemas.find(p => p.id === problemaId);
+            if (!problemaAtual) return;
+
+            navegacao.push({ id: problemaId, nome: problemaAtual.sintoma });
+            atualizarBreadcrumb();
+
+            // Se tem perguntas, mostra a primeira
+            if (problemaAtual.perguntas && problemaAtual.perguntas.length > 0) {
+                mostrarPergunta(problemaAtual.perguntas[0], problemaAtual);
+            } else if (problemaAtual.solucao) {
+                // Se já tem solução direta, mostra
+                mostrarSolucao(problemaAtual.solucao);
+            }
+        }
+
+        // Mostra uma pergunta
+        function mostrarPergunta(pergunta, contexto) {
+            const container = document.getElementById('conteudo');
+            container.innerHTML = `
+        <button class="back-btn" onclick="voltarAnterior()">← Voltar</button>
+        
+        <div class="pergunta-container">
+          <div class="pergunta-texto">🤔 ${pergunta.texto}</div>
+          
+          ${pergunta.opcoes.map((op, i) => `
+            <button class="opcao-btn" onclick='processarResposta(${JSON.stringify(op)}, ${JSON.stringify(contexto)})'>
+              ${op.texto}
+            </button>
+          `).join('')}
+        </div>
+      `;
+        }
+
+        // Processa resposta da pergunta
+        function processarResposta(opcao, contexto) {
+            navegacao.push({ nome: opcao.texto });
+            atualizarBreadcrumb();
+
+            // Se tem solução direta
+            if (opcao.solucao && contexto.solucoes && contexto.solucoes[opcao.solucao]) {
+                mostrarSolucao(contexto.solucoes[opcao.solucao]);
+                return;
+            }
+
+            // Se tem próximo subproblema
+            if (opcao.proximo && contexto.subproblemas && contexto.subproblemas[opcao.proximo]) {
+                const subproblema = contexto.subproblemas[opcao.proximo];
+
+                // Se subproblema tem solução direta
+                if (subproblema.solucao) {
+                    mostrarSolucao(subproblema.solucao);
+                    return;
+                }
+
+                // Se tem mais perguntas
+                if (subproblema.perguntas && subproblema.perguntas.length > 0) {
+                    mostrarPergunta(subproblema.perguntas[0], subproblema);
+                    return;
+                }
+            }
+
+            // Fallback - mostra mensagem genérica
+            mostrarSolucao({
+                titulo: 'Diagnóstico Avançado Necessário',
+                passos: [
+                    'O problema pode ter múltiplas causas',
+                    'Consulte o manual técnico da máquina',
+                    'Verifique códigos de erro no painel',
+                    'Considere chamar suporte especializado'
+                ]
+            });
+        }
+
+        // Mostra solução
+        function mostrarSolucao(solucao) {
+            const container = document.getElementById('conteudo');
+            container.innerHTML = `
+        <button class="back-btn" onclick="voltarAnterior()">← Voltar</button>
+        
+        <div class="solucao-container">
+          <div class="solucao-header">
+            <span style="font-size: 1.5rem;">✅</span>
+            <h3>${solucao.titulo}</h3>
+          </div>
+          
+          <ol class="solucao-passos">
+            ${solucao.passos.map((passo, i) => `
+              <li class="solucao-passo">
+                <span class="passo-numero">${i + 1}</span>
+                <span class="passo-texto">${passo}</span>
+              </li>
+            `).join('')}
+          </ol>
+        </div>
+        
+        <div class="mt-3">
+          <button class="btn btn-primary btn-block" onclick="voltarInicio()">
+            🔍 Novo Diagnóstico
+          </button>
+        </div>
+        
+        <div class="mt-2">
+          <button class="btn btn-secondary btn-block" onclick="registrarDiagnostico()">
+            📋 Registrar este diagnóstico
+          </button>
+        </div>
+      `;
+        }
+
+        // Navegação
+        function voltarInicio() {
+            mostrarSistemas();
+        }
+
+        function voltarAnterior() {
+            if (navegacao.length > 1) {
+                navegacao.pop();
+                // Recarrega baseado no estado
+                if (navegacao.length === 1) {
+                    selecionarSistema(navegacao[0].id);
+                    navegacao = navegacao.slice(0, 1);
+                } else {
+                    voltarInicio();
+                }
+            } else {
+                voltarInicio();
+            }
+        }
+
+        function voltarPara(index) {
+            navegacao = navegacao.slice(0, index + 1);
+
+            if (index === 0 && sistemaAtual) {
+                selecionarSistema(sistemaAtual.id);
+                navegacao = navegacao.slice(0, 1);
+            } else {
+                voltarInicio();
+            }
+        }
+
+        // Registra diagnóstico realizado
+        async function registrarDiagnostico() {
+            try {
+                await DB.init();
+
+                const diagnostico = {
+                    sistema: sistemaAtual?.nome || 'Desconhecido',
+                    problema: problemaAtual?.sintoma || 'Desconhecido',
+                    navegacao: navegacao.map(n => n.nome).join(' > '),
+                    data: new Date().toISOString()
+                };
+
+                await DB.salvarDiagnostico(diagnostico);
+                App.showToast('Diagnóstico registrado!', 'success');
+            } catch (error) {
+                console.error('Erro ao registrar:', error);
+                App.showToast('Erro ao registrar', 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>
