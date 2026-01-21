@@ -936,6 +936,12 @@
             const data = new Date(checklist.data);
             const config = CHECKLIST_ITEMS[checklist.tipo];
 
+            // Conta resultados
+            const totalItens = checklist.itens?.length || 0;
+            const itensOk = checklist.itens?.filter(i => i.status === 'ok').length || 0;
+            const itensProblema = checklist.itens?.filter(i => i.status === 'problema').length || 0;
+            const itensPendente = totalItens - itensOk - itensProblema;
+
             // Agrupa itens por categoria
             let conteudoHtml = `
                 <div class="print-header">
@@ -948,6 +954,20 @@
                         <p class="print-header-info">${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
                     </div>
                 </div>
+                <div class="print-summary" style="display: flex; gap: 1rem; margin-bottom: 1rem; padding: 0.75rem; background: #f0f0f0; border-radius: 8px;">
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #10b981;">✓ ${itensOk}</div>
+                        <div style="font-size: 0.8rem; color: #666;">OK</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #ef4444;">! ${itensProblema}</div>
+                        <div style="font-size: 0.8rem; color: #666;">Problemas</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #6b7280;">? ${itensPendente}</div>
+                        <div style="font-size: 0.8rem; color: #666;">Pendentes</div>
+                    </div>
+                </div>
             `;
 
             if (config) {
@@ -957,13 +977,25 @@
                         const itemSalvo = checklist.itens?.find(i => i.id === item.id);
                         const status = itemSalvo?.status || 'pendente';
                         const statusIcon = status === 'ok' ? '✓' : (status === 'problema' ? '!' : '?');
+                        const fotos = itemSalvo?.fotos || [];
 
                         conteudoHtml += `
-                            <div class="print-item">
+                            <div class="print-item" style="margin-bottom: ${fotos.length > 0 ? '1rem' : '0'};">
                                 <div class="status ${status}">${statusIcon}</div>
-                                <div>
+                                <div style="flex: 1;">
                                     <strong>${item.nome}</strong>
+                                    <div style="font-size: 0.8rem; color: #888;">${item.descricao}</div>
                                     ${itemSalvo?.obs ? `<div class="obs">📝 ${itemSalvo.obs}</div>` : ''}
+                                    ${fotos.length > 0 ? `
+                                        <div class="print-photos" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                            ${fotos.map((foto, idx) => `
+                                                <div style="flex: 0 0 auto;">
+                                                    <img src="${foto.data}" alt="Foto ${idx + 1}" style="width: 120px; height: 90px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                                                    ${foto.descricao ? `<div style="font-size: 0.7rem; color: #666; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${foto.descricao}</div>` : ''}
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
                                 </div>
                             </div>
                         `;
@@ -977,6 +1009,20 @@
                     <p style="padding: 0.5rem; background: #f5f5f5; border-radius: 4px;">${checklist.observacoesGerais}</p>
                 `;
             }
+
+            // Rodapé com assinatura
+            conteudoHtml += `
+                <div class="print-footer" style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #16213e;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <div style="flex: 1; text-align: center; border-top: 1px solid #333; margin: 0 1rem; padding-top: 0.5rem;">
+                            <strong>Técnico Responsável</strong>
+                        </div>
+                        <div style="flex: 1; text-align: center; border-top: 1px solid #333; margin: 0 1rem; padding-top: 0.5rem;">
+                            <strong>Supervisor</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
 
             document.getElementById('printContent').innerHTML = conteudoHtml;
             document.getElementById('modalPrint').classList.add('active');
