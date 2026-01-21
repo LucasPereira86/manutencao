@@ -165,25 +165,110 @@
         }
 
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
             body * {
                 visibility: hidden;
             }
 
+            .modal-overlay#modalPrint {
+                visibility: visible !important;
+                position: fixed !important;
+                background: white !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                z-index: 99999 !important;
+            }
+
             .print-content,
             .print-content * {
-                visibility: visible;
+                visibility: visible !important;
             }
 
             .print-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                max-width: none !important;
+                padding: 20px !important;
+                margin: 0 !important;
+                background: white !important;
+                color: black !important;
+                font-size: 12pt !important;
+            }
+
+            .print-content h1 {
+                font-size: 18pt !important;
+                color: #16213e !important;
+            }
+
+            .print-content h2 {
+                font-size: 14pt !important;
+                color: #1a1a2e !important;
+                page-break-after: avoid !important;
+            }
+
+            .print-content h3 {
+                font-size: 12pt !important;
+            }
+
+            .print-item {
+                page-break-inside: avoid !important;
+            }
+
+            .print-item .status {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-item .status.ok {
+                background: #10b981 !important;
+                color: white !important;
+            }
+
+            .print-item .status.problema {
+                background: #ef4444 !important;
+                color: white !important;
+            }
+
+            .print-item .status.pendente {
+                background: #6b7280 !important;
+                color: white !important;
+            }
+
+            .print-photos img,
+            .print-content img {
+                max-width: 300px !important;
+                max-height: 250px !important;
+                page-break-inside: avoid !important;
             }
 
             .modal-header,
-            .modal button {
+            .modal button,
+            .print-modal>div:last-child {
                 display: none !important;
+            }
+
+            .print-footer {
+                page-break-inside: avoid !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 15mm;
             }
         }
 
@@ -996,8 +1081,8 @@
                                         <div class="print-photos" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
                                             ${fotos.map((foto, idx) => `
                                                 <div style="flex: 0 0 auto;">
-                                                    <img src="${foto.data}" alt="Foto ${idx + 1}" style="width: 120px; height: 90px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
-                                                    ${foto.descricao ? `<div style="font-size: 0.7rem; color: #666; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${foto.descricao}</div>` : ''}
+                                                    <img src="${foto.data}" alt="Foto ${idx + 1}" style="width: 200px; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                                                    ${foto.descricao ? `<div style="font-size: 0.8rem; color: #666; max-width: 200px;">${foto.descricao}</div>` : ''}
                                                 </div>
                                             `).join('')}
                                         </div>
