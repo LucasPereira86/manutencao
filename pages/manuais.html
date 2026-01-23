@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0F172A">
     <title>Manuais - Manutenção de Campo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
@@ -311,18 +313,27 @@
                 <h1 class="app-title">Manuais</h1>
                 <p class="app-subtitle">Documentação técnica CH570</p>
             </div>
-            <button id="btnTema" onclick="App.toggleTema()"
-                style="padding: 0.5rem 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">Escuro</button>
+            <button id="btnTema" onclick="App.toggleTema()" class="theme-toggle" aria-label="Alternar Tema">
+                <i class="ph ph-moon"></i>
+            </button>
         </header>
         <div class="search-box">
             <input type="text" id="buscaManual" placeholder="Buscar manual..." oninput="filtrarManuais(this.value)">
         </div>
         <div id="listaManuais"></div>
         <nav class="bottom-nav">
-            <a href="../index.html" class="nav-item"><span class="nav-label">Início</span></a>
-            <a href="checklist.html" class="nav-item"><span class="nav-label">Checklist</span></a>
-            <a href="manuais.html" class="nav-item active"><span class="nav-label">Manuais</span></a>
-            <a href="diagnostico.html" class="nav-item"><span class="nav-label">Diagnóstico</span></a>
+            <a href="../index.html" class="nav-item">
+                <i class="ph ph-house"></i>
+            </a>
+            <a href="checklist.html" class="nav-item">
+                <i class="ph ph-check-square"></i>
+            </a>
+            <a href="manuais.html" class="nav-item active">
+                <i class="ph ph-book-open-text"></i>
+            </a>
+            <a href="diagnostico.html" class="nav-item">
+                <i class="ph ph-wrench"></i>
+            </a>
         </nav>
     </div>
 
@@ -330,9 +341,12 @@
         <div class="pdf-header">
             <button onclick="fecharPDF()">✕</button>
             <h3 id="pdfTitulo">Manual</h3>
+            <button onclick="fecharPDF()">✕</button>
+            <h3 id="pdfTitulo">Manual</h3>
             <div class="pdf-controls">
                 <button onclick="zoomOut()">➖</button>
                 <button onclick="zoomIn()">➕</button>
+                <button onclick="abrirExterno()" title="Abrir em Nova Aba">🔗</button>
             </div>
         </div>
 
@@ -371,47 +385,47 @@
             {
                 categoria: 'Informações Gerais',
                 itens: [
-                    { nome: 'CH570 2020 Adecoagro', arquivo: 'CH570 2020 ADECOAGRO.pdf', icone: 'IG' },
-                    { nome: 'Capacidades CH570 e CH670', arquivo: 'Capacidades CH570 e CH670-1.pdf', icone: 'CP' },
-                    { nome: 'Código de Erro CH570', arquivo: 'Código de Erro CH570.pdf', icone: 'ER' },
-                    { nome: 'Pressão CH', arquivo: 'PRESSÃO CH.pdf', icone: 'PR' }
+                    { nome: 'CH570 2020 Adecoagro', arquivo: 'ch570_2020_adecoagro.pdf', icone: '<i class="ph ph-files"></i>' },
+                    { nome: 'Capacidades CH570 e CH670', arquivo: 'capacidades_ch570_ch670.pdf', icone: '<i class="ph ph-flask"></i>' },
+                    { nome: 'Código de Erro CH570', arquivo: 'codigo_erro_ch570.pdf', icone: '<i class="ph ph-warning-circle"></i>' },
+                    { nome: 'Pressão CH', arquivo: 'pressao_ch.pdf', icone: '<i class="ph ph-gauge"></i>' }
                 ]
             },
             {
                 categoria: 'Motor',
                 itens: [
-                    { nome: 'Motor CH 1', arquivo: 'motor ch 1.pdf', icone: 'M1' },
-                    { nome: 'Motor CH 2', arquivo: 'motor ch 2.pdf', icone: 'M2' },
-                    { nome: 'Motor CH 3', arquivo: 'motor ch 3.pdf', icone: 'M3' },
-                    { nome: 'Sensores do Motor CH570', arquivo: 'sensores do motor CH 570.pdf', icone: 'SN' },
-                    { nome: 'Sistema EGR', arquivo: 'Sistema EGR CH-1.pdf', icone: 'EG' }
+                    { nome: 'Motor CH 1', arquivo: 'motor_ch_1.pdf', icone: '<i class="ph ph-engine"></i>' },
+                    { nome: 'Motor CH 2', arquivo: 'motor_ch_2.pdf', icone: '<i class="ph ph-engine"></i>' },
+                    { nome: 'Motor CH 3', arquivo: 'motor_ch_3.pdf', icone: '<i class="ph ph-engine"></i>' },
+                    { nome: 'Sensores do Motor CH570', arquivo: 'sensores_motor_ch570.pdf', icone: '<i class="ph ph-plugs-connected"></i>' },
+                    { nome: 'Sistema EGR', arquivo: 'sistema_egr_ch.pdf', icone: '<i class="ph ph-recycle"></i>' }
                 ]
             },
             {
                 categoria: 'Sistema Hidráulico',
                 itens: [
-                    { nome: 'Hidráulica CH570', arquivo: 'Hidraulica ch570.pdf', icone: 'HD' },
-                    { nome: 'Catálogo Mangueiras Hidráulicas', arquivo: 'Catálogo Mangueiras Hidráulicas CH570_1 (1).pdf', icone: 'MG' }
+                    { nome: 'Hidráulica CH570', arquivo: 'hidraulica_ch570.pdf', icone: '<i class="ph ph-drop"></i>' },
+                    { nome: 'Catálogo Mangueiras Hidráulicas', arquivo: 'catalogo_mangueiras_hidraulicas_ch570.pdf', icone: '<i class="ph ph-drop-half-bottom"></i>' }
                 ]
             },
             {
                 categoria: 'Sistema Elétrico',
                 itens: [
-                    { nome: 'Chicote da Transmissão', arquivo: 'Chicote da Transmissão.pdf', icone: 'CT' },
-                    { nome: 'Treinamento Elétrico/Hidráulico', arquivo: 'TREINAMENTO CH 570 ELETRICO E HIDRAULICO  (2).pdf', icone: 'EL' },
-                    { nome: 'Treinamento Elétrico/Hidráulico (Maicon)', arquivo: 'TREINAMENTO CH 570 ELETRICO E HIDRAULICO - MAICON.pdf', icone: 'EL' }
+                    { nome: 'Chicote da Transmissão', arquivo: 'chicote_transmissao.pdf', icone: '<i class="ph ph-lightning"></i>' },
+                    { nome: 'Treinamento Elétrico/Hidráulico', arquivo: 'treinamento_eletrico_hidraulico.pdf', icone: '<i class="ph ph-lightning"></i>' },
+                    { nome: 'Treinamento Elétrico/Hidráulico (Maicon)', arquivo: 'treinamento_eletrico_hidraulico_maicon.pdf', icone: '<i class="ph ph-lightning"></i>' }
                 ]
             },
             {
                 categoria: 'Sistemas Específicos',
                 itens: [
-                    { nome: 'Picador CH', arquivo: 'Picador CH.PDF', icone: 'PC' }
+                    { nome: 'Picador CH', arquivo: 'picador_ch.pdf', icone: '<i class="ph ph-scissors"></i>' }
                 ]
             },
             {
                 categoria: 'Manual Completo',
                 itens: [
-                    { nome: 'Manual Reparo CH570/670 (Completo)', arquivo: 'Manual Reparo CH570,670-1-1.pdf', icone: 'MR' }
+                    { nome: 'Manual Reparo CH570/670 (Completo)', arquivo: 'manual_reparo_ch570_670.pdf', icone: '<i class="ph ph-book-bookmark"></i>' }
                 ]
             }
         ];
@@ -481,16 +495,47 @@
             resultadosBusca = [];
             indiceResultadoAtual = 0;
 
+            // Variável global para armazenar URL atual
+            window.currentPdfUrl = '../' + manual.arquivo;
+
             try {
-                const url = '../' + manual.arquivo;
-                pdfDoc = await pdfjsLib.getDocument(url).promise;
+                const url = window.currentPdfUrl;
+
+                // Promessa com timeout de 2 segundos
+                const loadPdfPromise = pdfjsLib.getDocument(url).promise;
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Timeout: O PDF demorou muito para responder.')), 2000)
+                );
+
+                // Race condition: ganha quem terminar primeiro (carregar ou timeout)
+                pdfDoc = await Promise.race([loadPdfPromise, timeoutPromise]);
+
                 totalPaginas = pdfDoc.numPages;
                 paginaAtual = 1;
                 atualizarInfoPagina();
                 await renderizarPagina(paginaAtual);
             } catch (error) {
                 console.error('Erro ao carregar PDF:', error);
-                container.innerHTML = '<div class="empty-state"><div class="icon">❌</div><h3>Erro ao carregar PDF</h3><p>' + error.message + '</p></div>';
+
+                // Fallback amigável para erro de CORS/Local ou Timeout ou Arquivo não encontrado
+                const isLocalError = window.location.protocol === 'file:';
+                const msgErro = (isLocalError || error.message.includes('Timeout'))
+                    ? 'O navegador não conseguiu carregar este PDF localmente.'
+                    : 'Não foi possível carregar o PDF.';
+
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📄</div>
+                        <h3>${msgErro}</h3>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+                            Isso é comum ao acessar sem servidor web.<br>
+                            Use o botão abaixo para visualizar.
+                        </p>
+                        <button class="btn btn-primary" onclick="window.open('${window.currentPdfUrl}', '_blank')">
+                            Abrir PDF em Nova Aba
+                        </button>
+                    </div>
+                `;
             }
         }
 
@@ -670,6 +715,12 @@
             pdfDoc = null;
             ultimaBusca = '';
             resultadosBusca = [];
+        }
+
+        function abrirExterno() {
+            if (window.currentPdfUrl) {
+                window.open(window.currentPdfUrl, '_blank');
+            }
         }
     </script>
     <script src="../js/app.js"></script>

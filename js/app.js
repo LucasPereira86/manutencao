@@ -246,10 +246,19 @@ function toggleTema() {
 }
 
 // Atualiza texto do botão de tema
+// Atualiza texto do botão de tema
 function atualizarBotaoTema(tema) {
     const btn = document.getElementById('btnTema');
     if (btn) {
-        btn.textContent = tema === 'dark' ? 'Claro' : 'Escuro';
+        // Suporte para ícones Phosphor se disponível, senão texto fallback
+        if (typeof window !== 'undefined' && document.querySelector('script[src*="phosphor"]')) {
+            btn.innerHTML = tema === 'dark'
+                ? '<i class="ph ph-sun"></i>'
+                : '<i class="ph ph-moon"></i>';
+        } else {
+            // Fallback para páginas ainda não migradas (ou texto simples)
+            btn.textContent = tema === 'dark' ? 'Claro' : 'Escuro';
+        }
     }
 }
 

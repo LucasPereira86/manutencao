@@ -12,6 +12,9 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <title>Manutenção de Campo</title>
+  <meta name="theme-color" content="#0F172A">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -24,61 +27,69 @@
         <p class="app-subtitle" id="currentDate"></p>
       </div>
       <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <button id="btnTema" onclick="App.toggleTema()"
-          style="padding: 0.5rem 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">Escuro</button>
-        <div class="app-logo">MC</div>
+        <button id="btnTema" onclick="App.toggleTema()" class="theme-toggle" aria-label="Alternar Tema">
+          <i class="ph ph-moon"></i>
+        </button>
       </div>
     </header>
 
     <!-- Menu Principal -->
     <main id="mainContent">
       <!-- Card Checklist -->
-      <div class="card card-clickable" onclick="navigateTo('checklist')">
+      <div class="card" onclick="navigateTo('checklist')">
         <div class="card-header">
-          <div class="card-icon checklist">CK</div>
-          <div>
+          <div class="card-icon checklist">
+            <i class="ph ph-check-square"></i>
+          </div>
+          <div class="card-content">
             <h2 class="card-title">Checklist</h2>
             <p class="card-description">Inspeção diária das máquinas</p>
           </div>
         </div>
         <div class="stats-mini" id="checklistStats">
-          <span class="status-badge info">Carregando...</span>
+          <span class="status-badge info"><i class="ph ph-spinner"></i> Carregando...</span>
         </div>
       </div>
 
       <!-- Card Dashboard -->
-      <div class="card card-clickable" onclick="navigateTo('dashboard')">
+      <div class="card" onclick="navigateTo('dashboard')">
         <div class="card-header">
-          <div class="card-icon dashboard">DS</div>
-          <div>
+          <div class="card-icon dashboard">
+            <i class="ph ph-chart-line-up"></i>
+          </div>
+          <div class="card-content">
             <h2 class="card-title">Dashboard</h2>
             <p class="card-description">Status da frota e relatórios</p>
           </div>
         </div>
         <div class="stats-mini" id="dashboardStats">
-          <span class="status-badge ok">Carregando...</span>
+          <span class="status-badge ok"><i class="ph ph-spinner"></i> Carregando...</span>
         </div>
       </div>
 
       <!-- Card Diagnóstico -->
-      <div class="card card-clickable" onclick="navigateTo('diagnostico')">
+      <div class="card" onclick="navigateTo('diagnostico')">
         <div class="card-header">
-          <div class="card-icon diagnostico">DG</div>
-          <div>
+          <div class="card-icon diagnostico">
+            <i class="ph ph-wrench"></i>
+          </div>
+          <div class="card-content">
             <h2 class="card-title">Diagnóstico</h2>
             <p class="card-description">Guia de solução de problemas</p>
           </div>
         </div>
         <div class="stats-mini">
-          <span class="status-badge warning">Encontre soluções rápidas</span>
+          <span class="status-badge warning">Soluções rápidas</span>
         </div>
       </div>
 
       <!-- Card Manuais -->
-      <div class="card card-clickable" onclick="navigateTo('manuais')">
+      <div class="card" onclick="navigateTo('manuais')">
         <div class="card-header">
-          <div class="card-icon" style="background: var(--status-warning);">MN</div>
-          <div>
+          <div class="card-icon" style="color: #F59E0B; background: #FFFBEB;">
+            <i class="ph ph-book-open-text"></i>
+          </div>
+          <div class="card-content">
             <h2 class="card-title">Manuais</h2>
             <p class="card-description">Documentação técnica CH570</p>
           </div>
@@ -89,10 +100,12 @@
       </div>
 
       <!-- Card Gerenciar Frota -->
-      <div class="card card-clickable" onclick="navigateTo('frota')">
+      <div class="card" onclick="navigateTo('frota')">
         <div class="card-header">
-          <div class="card-icon" style="background: #64748b;">GF</div>
-          <div>
+          <div class="card-icon" style="color: #6366F1; background: #EEF2FF;">
+            <i class="ph ph-tractor"></i>
+          </div>
+          <div class="card-content">
             <h2 class="card-title">Gerenciar Frota</h2>
             <p class="card-description">Adicionar e remover máquinas</p>
           </div>
@@ -131,16 +144,16 @@
     <!-- Navegação Inferior -->
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item active">
-        <span class="nav-label">Início</span>
+        <i class="ph ph-house"></i>
       </a>
       <a href="pages/checklist.html" class="nav-item">
-        <span class="nav-label">Checklist</span>
+        <i class="ph ph-check-square"></i>
       </a>
       <a href="pages/manuais.html" class="nav-item">
-        <span class="nav-label">Manuais</span>
+        <i class="ph ph-book-open-text"></i>
       </a>
       <a href="pages/diagnostico.html" class="nav-item">
-        <span class="nav-label">Diagnóstico</span>
+        <i class="ph ph-wrench"></i>
       </a>
     </nav>
   </div>
@@ -202,17 +215,17 @@
         // Atualiza badge do dashboard
         const dashboardStats = document.getElementById('dashboardStats');
         if (totalMaquinas === 0) {
-          dashboardStats.innerHTML = '<span class="status-badge warning">Cadastre máquinas</span>';
+          dashboardStats.innerHTML = '<span class="status-badge warning"><i class="ph ph-warning"></i> Cadastre máquinas</span>';
         } else {
-          dashboardStats.innerHTML = `<span class="status-badge ok">${totalMaquinas} máquinas</span>`;
+          dashboardStats.innerHTML = `<span class="status-badge ok"><i class="ph ph-check"></i> ${totalMaquinas} máquinas</span>`;
         }
 
         // Atualiza badge do checklist
         const checklistStats = document.getElementById('checklistStats');
         if (checklistsHoje.length === 0) {
-          checklistStats.innerHTML = '<span class="status-badge warning">Nenhum checklist hoje</span>';
+          checklistStats.innerHTML = '<span class="status-badge warning"><i class="ph ph-calendar-x"></i> Nenhum realizado</span>';
         } else {
-          checklistStats.innerHTML = `<span class="status-badge ok">${checklistsHoje.length} realizados hoje</span>`;
+          checklistStats.innerHTML = `<span class="status-badge ok"><i class="ph ph-check-circle"></i> ${checklistsHoje.length} hoje</span>`;
         }
       } catch (error) {
         console.error('Erro ao carregar estatísticas:', error);
@@ -221,6 +234,17 @@
 
     function navigateTo(page) {
       window.location.href = `pages/${page}.html`;
+    }
+
+    // Atualiza ícone do botão de tema de global scope
+    // (A função toggleTema do App.js chama atualizarBotaoTema se existir)
+    function atualizarBotaoTema(tema) {
+      const btn = document.getElementById('btnTema');
+      if (btn) {
+        btn.innerHTML = tema === 'dark'
+          ? '<i class="ph ph-sun"></i>'
+          : '<i class="ph ph-moon"></i>';
+      }
     }
   </script>
 </body>

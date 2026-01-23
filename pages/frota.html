@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0F172A">
     <title>Gerenciar Frota - Manutenção de Campo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .frota-item {
@@ -88,8 +90,9 @@
                 <h1 class="app-title">Gerenciar Frota</h1>
                 <p class="app-subtitle">Adicionar e remover máquinas</p>
             </div>
-            <button id="btnTema" onclick="App.toggleTema()"
-                style="padding: 0.5rem 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">Escuro</button>
+            <button id="btnTema" onclick="App.toggleTema()" class="theme-toggle" aria-label="Alternar Tema">
+                <i class="ph ph-moon"></i>
+            </button>
         </header>
 
         <!-- Contador -->
@@ -152,16 +155,16 @@
         <!-- Navegação Inferior -->
         <nav class="bottom-nav">
             <a href="../index.html" class="nav-item">
-                <span class="nav-label">Início</span>
+                <i class="ph ph-house"></i>
             </a>
             <a href="checklist.html" class="nav-item">
-                <span class="nav-label">Checklist</span>
+                <i class="ph ph-check-square"></i>
             </a>
-            <a href="dashboard.html" class="nav-item">
-                <span class="nav-label">Dashboard</span>
+            <a href="manuais.html" class="nav-item">
+                <i class="ph ph-book-open-text"></i>
             </a>
-            <a href="frota.html" class="nav-item active">
-                <span class="nav-label">Frota</span>
+            <a href="diagnostico.html" class="nav-item">
+                <i class="ph ph-wrench"></i>
             </a>
         </nav>
     </div>
