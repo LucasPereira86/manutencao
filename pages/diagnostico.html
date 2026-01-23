@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#16213e">
+    <meta name="theme-color" content="#2563eb">
     <title>Diagnóstico - Manutenção de Campo</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -187,9 +187,11 @@
         <!-- Header -->
         <header class="app-header">
             <div>
-                <h1 class="app-title">🔍 Diagnóstico</h1>
+                <h1 class="app-title">Diagnóstico</h1>
                 <p class="app-subtitle">Encontre soluções rápidas</p>
             </div>
+            <button id="btnTema" onclick="App.toggleTema()"
+                style="padding: 0.5rem 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">Escuro</button>
         </header>
 
         <!-- Breadcrumb -->
@@ -205,19 +207,15 @@
         <!-- Navegação Inferior -->
         <nav class="bottom-nav">
             <a href="../index.html" class="nav-item">
-                <span class="nav-icon">🏠</span>
                 <span class="nav-label">Início</span>
             </a>
             <a href="checklist.html" class="nav-item">
-                <span class="nav-icon">📋</span>
                 <span class="nav-label">Checklist</span>
             </a>
             <a href="dashboard.html" class="nav-item">
-                <span class="nav-icon">📊</span>
                 <span class="nav-label">Dashboard</span>
             </a>
             <a href="diagnostico.html" class="nav-item active">
-                <span class="nav-icon">🔍</span>
                 <span class="nav-label">Diagnóstico</span>
             </a>
         </nav>

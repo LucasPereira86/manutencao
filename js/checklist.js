@@ -6,7 +6,7 @@ const CHECKLIST_ITEMS = {
         categorias: [
             {
                 nome: 'Motor e Sistema de Arrefecimento',
-                icone: '🔥',
+                icone: 'MT',
                 itens: [
                     { id: 'motor_oleo', nome: 'Nível de óleo do motor', descricao: 'Verificar com a máquina nivelada e motor frio' },
                     { id: 'motor_agua', nome: 'Nível do líquido de arrefecimento', descricao: 'Verificar reservatório e radiador' },
@@ -24,7 +24,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Combustível',
-                icone: '⛽',
+                icone: 'CB',
                 itens: [
                     { id: 'comb_nivel', nome: 'Nível de combustível', descricao: 'Verificar quantidade no tanque' },
                     { id: 'comb_filtro_prim', nome: 'Filtro primário (separador)', descricao: 'Drenar água acumulada' },
@@ -36,7 +36,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema Hidráulico',
-                icone: '💧',
+                icone: 'HD',
                 itens: [
                     { id: 'hidr_oleo', nome: 'Nível de óleo hidráulico', descricao: 'Verificar no visor do reservatório' },
                     { id: 'hidr_filtros', nome: 'Indicador dos filtros hidráulicos', descricao: 'Verificar se está no verde' },
@@ -51,7 +51,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Corte de Base',
-                icone: '⚔️',
+                icone: 'CB',
                 itens: [
                     { id: 'corte_facas', nome: 'Facas do corte de base', descricao: 'Verificar afiação e fixação dos parafusos' },
                     { id: 'corte_disco', nome: 'Discos de corte', descricao: 'Verificar desgaste, trincas e balanceamento' },
@@ -65,7 +65,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Cortador de Pontas e Divisores',
-                icone: '🌿',
+                icone: 'DL',
                 itens: [
                     { id: 'ponta_facas', nome: 'Facas do corte de pontas', descricao: 'Verificar afiação e fixação' },
                     { id: 'ponta_rotacao', nome: 'Rotação do corte de pontas', descricao: 'Verificar funcionamento' },
@@ -79,7 +79,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Rolos Alimentadores',
-                icone: '🔄',
+                icone: 'RL',
                 itens: [
                     { id: 'rolo_superior', nome: 'Rolos superiores', descricao: 'Verificar rotação e facas' },
                     { id: 'rolo_inferior', nome: 'Rolos inferiores', descricao: 'Verificar rotação e facas' },
@@ -91,7 +91,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Limpeza',
-                icone: '🌬️',
+                icone: 'EX',
                 itens: [
                     { id: 'limp_ext_prim', nome: 'Extrator primário', descricao: 'Verificar pás, fixação e balanceamento' },
                     { id: 'limp_ext_sec', nome: 'Extrator secundário', descricao: 'Verificar pás, fixação e rotação' },
@@ -104,7 +104,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Picador',
-                icone: '🔪',
+                icone: 'PC',
                 itens: [
                     { id: 'pic_facas', nome: 'Facas do picador', descricao: 'Verificar afiação, fixação e desgaste' },
                     { id: 'pic_contrafacas', nome: 'Contra-facas', descricao: 'Verificar distância (1-2mm) e desgaste' },
@@ -117,7 +117,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Elevador e Descarga',
-                icone: '⬆️',
+                icone: 'EL',
                 itens: [
                     { id: 'elev_corrente', nome: 'Corrente do elevador', descricao: 'Verificar tensão, pinos e lubrificação' },
                     { id: 'elev_taliscas', nome: 'Taliscas', descricao: 'Verificar fixação, desgaste e falta' },
@@ -131,7 +131,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Esteiras e Sistema de Deslocamento',
-                icone: '🛤️',
+                icone: 'ES',
                 itens: [
                     { id: 'est_tensao', nome: 'Tensão das esteiras', descricao: 'Verificar conforme manual (folga de 20-30mm)' },
                     { id: 'est_sapatas', nome: 'Sapatas das esteiras', descricao: 'Verificar desgaste e fixação' },
@@ -146,7 +146,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema Elétrico',
-                icone: '⚡',
+                icone: 'SE',
                 itens: [
                     { id: 'elet_bateria', nome: 'Baterias', descricao: 'Verificar terminais e nível de eletrólito' },
                     { id: 'elet_alternador', nome: 'Alternador', descricao: 'Verificar carga (13.5-14.5V)' },
@@ -160,7 +160,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Cabine e Segurança',
-                icone: '🪖',
+                icone: 'SG',
                 itens: [
                     { id: 'cab_ar_cond', nome: 'Ar condicionado', descricao: 'Verificar funcionamento e temperatura' },
                     { id: 'cab_filtros', nome: 'Filtros da cabine', descricao: 'Verificar limpeza ou substituir' },
@@ -177,7 +177,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Transmissão e Comandos',
-                icone: '⚙️',
+                icone: 'TR',
                 itens: [
                     { id: 'trans_oleo', nome: 'Óleo da transmissão', descricao: 'Verificar nível' },
                     { id: 'trans_vazamentos', nome: 'Vazamentos na transmissão', descricao: 'Verificar vedações' },
@@ -189,7 +189,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Lubrificação Geral',
-                icone: '🛢️',
+                icone: 'LB',
                 itens: [
                     { id: 'lub_central', nome: 'Sistema de lubrificação central', descricao: 'Verificar nível do reservatório' },
                     { id: 'lub_indicador', nome: 'Indicador de lubrificação', descricao: 'Verificar se não há alarme' },
@@ -206,7 +206,7 @@ const CHECKLIST_ITEMS = {
         categorias: [
             {
                 nome: 'Motor',
-                icone: '🔥',
+                icone: 'MT',
                 itens: [
                     { id: 'motor_oleo', nome: 'Nível de óleo do motor', descricao: 'Verificar com motor frio' },
                     { id: 'motor_agua', nome: 'Nível do líquido de arrefecimento', descricao: 'Verificar no reservatório' },
@@ -221,7 +221,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Combustível',
-                icone: '⛽',
+                icone: 'CB',
                 itens: [
                     { id: 'comb_nivel', nome: 'Nível de combustível', descricao: 'Verificar quantidade' },
                     { id: 'comb_filtro', nome: 'Filtro de combustível', descricao: 'Verificar indicador ou substituir' },
@@ -232,7 +232,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Transmissão',
-                icone: '⚙️',
+                icone: 'TR',
                 itens: [
                     { id: 'trans_oleo', nome: 'Óleo da transmissão', descricao: 'Verificar nível na vareta' },
                     { id: 'trans_vazamentos', nome: 'Vazamentos na transmissão', descricao: 'Verificar vedações e juntas' },
@@ -245,7 +245,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema Hidráulico',
-                icone: '💧',
+                icone: 'HD',
                 itens: [
                     { id: 'hidr_oleo', nome: 'Nível de óleo hidráulico', descricao: 'Verificar no visor' },
                     { id: 'hidr_filtros', nome: 'Filtro hidráulico', descricao: 'Verificar indicador' },
@@ -258,7 +258,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Pneus e Rodas',
-                icone: '🛞',
+                icone: 'PN',
                 itens: [
                     { id: 'pneu_pressao_d', nome: 'Pressão pneus dianteiros', descricao: 'Verificar conforme manual' },
                     { id: 'pneu_pressao_t', nome: 'Pressão pneus traseiros', descricao: 'Verificar conforme manual' },
@@ -271,7 +271,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Freios',
-                icone: '🛑',
+                icone: 'FR',
                 itens: [
                     { id: 'freio_servico', nome: 'Freio de serviço', descricao: 'Verificar funcionamento e curso' },
                     { id: 'freio_estac', nome: 'Freio de estacionamento', descricao: 'Verificar funcionamento' },
@@ -282,7 +282,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Direção',
-                icone: '🎯',
+                icone: 'DR',
                 itens: [
                     { id: 'dir_folga', nome: 'Folga na direção', descricao: 'Verificar jogo no volante' },
                     { id: 'dir_hidraulica', nome: 'Óleo da direção hidráulica', descricao: 'Verificar nível' },
@@ -293,7 +293,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema Elétrico',
-                icone: '⚡',
+                icone: 'SE',
                 itens: [
                     { id: 'elet_bateria', nome: 'Bateria', descricao: 'Verificar terminais e carga' },
                     { id: 'elet_alternador', nome: 'Alternador', descricao: 'Verificar carga' },
@@ -305,7 +305,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Cabine e Segurança',
-                icone: '🪖',
+                icone: 'SG',
                 itens: [
                     { id: 'cab_estrutura', nome: 'Estrutura ROPS/FOPS', descricao: 'Verificar integridade' },
                     { id: 'cab_cinto', nome: 'Cinto de segurança', descricao: 'Verificar funcionamento' },
@@ -318,7 +318,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Implementos e Acoplamento',
-                icone: '🔗',
+                icone: 'IG',
                 itens: [
                     { id: 'impl_engate', nome: 'Barra de tração', descricao: 'Verificar desgaste do olhal' },
                     { id: 'impl_pinos', nome: 'Pinos do 3 pontos', descricao: 'Verificar desgaste' },
@@ -335,7 +335,7 @@ const CHECKLIST_ITEMS = {
         categorias: [
             {
                 nome: 'Estrutura Geral',
-                icone: '🏗️',
+                icone: 'ET',
                 itens: [
                     { id: 'estr_chassi', nome: 'Chassi principal', descricao: 'Verificar trincas e soldas' },
                     { id: 'estr_longarinas', nome: 'Longarinas', descricao: 'Verificar deformações e trincas' },
@@ -349,7 +349,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Descarga',
-                icone: '⬇️',
+                icone: 'DC',
                 itens: [
                     { id: 'desc_cilindros', nome: 'Cilindros de basculamento', descricao: 'Verificar vazamentos e funcionamento' },
                     { id: 'desc_hastes', nome: 'Hastes dos cilindros', descricao: 'Verificar riscos e amassados' },
@@ -363,7 +363,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Rodado e Suspensão',
-                icone: '🛞',
+                icone: 'PN',
                 itens: [
                     { id: 'rod_pneus', nome: 'Pneus', descricao: 'Verificar pressão e desgaste' },
                     { id: 'rod_cortes', nome: 'Cortes nos pneus', descricao: 'Verificar flancos e banda' },
@@ -378,7 +378,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Engate',
-                icone: '🔗',
+                icone: 'EG',
                 itens: [
                     { id: 'eng_lanca', nome: 'Lança de engate', descricao: 'Verificar trincas e soldas' },
                     { id: 'eng_olhal', nome: 'Olhal de engate', descricao: 'Verificar desgaste e trincas' },
@@ -391,7 +391,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Sistema de Freios',
-                icone: '🛑',
+                icone: 'FR',
                 itens: [
                     { id: 'freio_linha', nome: 'Linha de ar/hidráulica', descricao: 'Verificar vazamentos' },
                     { id: 'freio_mangueiras', nome: 'Mangueiras de freio', descricao: 'Verificar condição' },
@@ -403,7 +403,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Segurança e Sinalização',
-                icone: '🪖',
+                icone: 'SG',
                 itens: [
                     { id: 'seg_refletores_f', nome: 'Refletores frontais', descricao: 'Verificar presença e visibilidade' },
                     { id: 'seg_refletores_t', nome: 'Refletores traseiros', descricao: 'Verificar presença e visibilidade' },
@@ -418,7 +418,7 @@ const CHECKLIST_ITEMS = {
             },
             {
                 nome: 'Lubrificação',
-                icone: '🛢️',
+                icone: 'LB',
                 itens: [
                     { id: 'lub_pinos_eng', nome: 'Pinos do engate', descricao: 'Aplicar graxa' },
                     { id: 'lub_dobradicas', nome: 'Dobradiças', descricao: 'Aplicar graxa' },

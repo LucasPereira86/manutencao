@@ -5,7 +5,7 @@ const DIAGNOSTICOS = {
         {
             id: 'motor',
             nome: 'Motor',
-            icone: '🔥',
+            icone: 'MT',
             problemas: [
                 {
                     id: 'motor_nao_liga',
@@ -228,7 +228,7 @@ const DIAGNOSTICOS = {
         {
             id: 'hidraulico',
             nome: 'Sistema Hidráulico',
-            icone: '💧',
+            icone: 'HD',
             problemas: [
                 {
                     id: 'hidr_lento',
@@ -344,7 +344,7 @@ const DIAGNOSTICOS = {
         {
             id: 'corte_base',
             nome: 'Corte de Base',
-            icone: '⚔️',
+            icone: 'CB',
             problemas: [
                 {
                     id: 'corte_ruim',
@@ -439,7 +439,7 @@ const DIAGNOSTICOS = {
         {
             id: 'divisores',
             nome: 'Divisores de Linha',
-            icone: '🌿',
+            icone: 'DL',
             problemas: [
                 {
                     id: 'div_nao_deita',
@@ -513,7 +513,7 @@ const DIAGNOSTICOS = {
         {
             id: 'rolos',
             nome: 'Rolos Alimentadores',
-            icone: '🔄',
+            icone: 'RL',
             problemas: [
                 {
                     id: 'rolo_nao_puxa',
@@ -570,7 +570,7 @@ const DIAGNOSTICOS = {
         {
             id: 'picador',
             nome: 'Sistema Picador',
-            icone: '🔪',
+            icone: 'PC',
             problemas: [
                 {
                     id: 'pic_tolete_grande',
@@ -662,7 +662,7 @@ const DIAGNOSTICOS = {
         {
             id: 'extratores',
             nome: 'Extratores (Limpeza)',
-            icone: '🌬️',
+            icone: 'EX',
             problemas: [
                 {
                     id: 'ext_nao_limpa',
@@ -735,7 +735,7 @@ const DIAGNOSTICOS = {
         {
             id: 'elevador',
             nome: 'Elevador',
-            icone: '⬆️',
+            icone: 'EL',
             problemas: [
                 {
                     id: 'elev_nao_gira',
@@ -810,7 +810,7 @@ const DIAGNOSTICOS = {
         {
             id: 'esteiras',
             nome: 'Esteiras',
-            icone: '🛤️',
+            icone: 'ES',
             problemas: [
                 {
                     id: 'est_saindo',
@@ -886,7 +886,7 @@ const DIAGNOSTICOS = {
         {
             id: 'eletrico',
             nome: 'Sistema Elétrico',
-            icone: '⚡',
+            icone: 'SE',
             problemas: [
                 {
                     id: 'elet_bateria',
@@ -979,7 +979,7 @@ const DIAGNOSTICOS = {
         {
             id: 'cabine',
             nome: 'Cabine e Ar Condicionado',
-            icone: '❄️',
+            icone: 'AC',
             problemas: [
                 {
                     id: 'cab_ar_nao_gela',
@@ -1053,7 +1053,7 @@ const DIAGNOSTICOS = {
         {
             id: 'transmissao',
             nome: 'Transmissão e Deslocamento',
-            icone: '⚙️',
+            icone: 'TR',
             problemas: [
                 {
                     id: 'trans_nao_anda',

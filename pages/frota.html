@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#16213e">
+    <meta name="theme-color" content="#2563eb">
     <title>Gerenciar Frota - Manutenção de Campo</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -85,9 +85,11 @@
         <!-- Header -->
         <header class="app-header">
             <div>
-                <h1 class="app-title">⚙️ Gerenciar Frota</h1>
+                <h1 class="app-title">Gerenciar Frota</h1>
                 <p class="app-subtitle">Adicionar e remover máquinas</p>
             </div>
+            <button id="btnTema" onclick="App.toggleTema()"
+                style="padding: 0.5rem 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">Escuro</button>
         </header>
 
         <!-- Contador -->
@@ -108,7 +110,7 @@
 
         <!-- Formulário para adicionar -->
         <div class="add-form">
-            <h3 class="section-title mb-2">➕ Adicionar Máquina</h3>
+            <h3 class="section-title mb-2">Adicionar Máquina</h3>
 
             <div class="form-group">
                 <label class="form-label">Tipo de Máquina</label>
@@ -130,7 +132,7 @@
             </div>
 
             <button class="btn btn-success btn-block" onclick="adicionarMaquina()">
-                ➕ Adicionar Máquina
+                Adicionar Máquina
             </button>
         </div>
 
@@ -150,19 +152,15 @@
         <!-- Navegação Inferior -->
         <nav class="bottom-nav">
             <a href="../index.html" class="nav-item">
-                <span class="nav-icon">🏠</span>
                 <span class="nav-label">Início</span>
             </a>
             <a href="checklist.html" class="nav-item">
-                <span class="nav-icon">📋</span>
                 <span class="nav-label">Checklist</span>
             </a>
             <a href="dashboard.html" class="nav-item">
-                <span class="nav-icon">📊</span>
                 <span class="nav-label">Dashboard</span>
             </a>
             <a href="frota.html" class="nav-item active">
-                <span class="nav-icon">⚙️</span>
                 <span class="nav-label">Frota</span>
             </a>
         </nav>
@@ -285,10 +283,10 @@
             });
         }
 
-        // Ícone por tipo
+        // Ícone por tipo (texto simples)
         function getIcone(tipo) {
-            const icones = { colhedora: '🚜', trator: '🚛', transbordo: '🚚' };
-            return icones[tipo] || '🔧';
+            const icones = { colhedora: 'CH', trator: 'TR', transbordo: 'TB' };
+            return icones[tipo] || 'MQ';
         }
 
         // Trocar tab

@@ -1,16 +1,18 @@
-const CACHE_NAME = 'manutencao-campo-v1';
+const CACHE_NAME = 'manutencao-campo-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/js/app.js',
-  '/js/db.js',
-  '/js/checklist.js',
-  '/js/dashboard.js',
-  '/js/diagnostico.js',
-  '/pages/checklist.html',
-  '/pages/dashboard.html',
-  '/pages/diagnostico.html'
+  './',
+  './index.html',
+  './css/style.css',
+  './js/app.js',
+  './js/db.js',
+  './js/checklist.js',
+  './js/dashboard.js',
+  './js/diagnostico.js',
+  './pages/checklist.html',
+  './pages/dashboard.html',
+  './pages/diagnostico.html',
+  './pages/manuais.html',
+  './pages/frota.html'
 ];
 
 // Instalação - cacheia recursos
@@ -22,6 +24,8 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  // Força ativação imediata
+  self.skipWaiting();
 });
 
 // Ativação - limpa caches antigos
@@ -37,6 +41,8 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  // Toma controle imediato
+  self.clients.claim();
 });
 
 // Fetch - retorna do cache ou busca na rede
@@ -65,7 +71,7 @@ self.addEventListener('fetch', event => {
       })
       .catch(() => {
         // Fallback para páginas offline
-        return caches.match('/index.html');
+        return caches.match('./index.html');
       })
   );
 });

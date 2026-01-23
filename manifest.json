@@ -2,10 +2,11 @@
   "name": "Gestão de Manutenção - Campo",
   "short_name": "Manutenção",
   "description": "Sistema de gestão de manutenção para máquinas agrícolas",
-  "start_url": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#16213e",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
   "orientation": "portrait",
   "icons": [
     {

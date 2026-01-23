@@ -3,7 +3,7 @@
 // Registra Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('./sw.js')
             .then(reg => console.log('Service Worker registrado:', reg.scope))
             .catch(err => console.log('Erro ao registrar SW:', err));
     });
@@ -17,15 +17,16 @@ function showToast(message, type = 'success', duration = 3000) {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
 
-    const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
+    // Marcadores textuais para cada tipo
+    const markers = {
+        success: '[OK]',
+        error: '[!]',
+        warning: '[!]',
+        info: '[i]'
     };
 
     toast.innerHTML = `
-    <span style="font-size: 1.25rem;">${icons[type]}</span>
+    <span style="font-size: 1rem; font-weight: bold;">${markers[type]}</span>
     <span>${message}</span>
   `;
 
@@ -120,14 +121,14 @@ function contarMaquinas() {
 // FUNÇÕES AUXILIARES
 // ========================================
 
-// Ícones por tipo de máquina
+// Ícones por tipo de máquina (texto simples)
 function getIconeMaquina(tipo) {
     const icones = {
-        colhedora: '🚜',
-        trator: '🚛',
-        transbordo: '🚚'
+        colhedora: 'CH',
+        trator: 'TR',
+        transbordo: 'TB'
     };
-    return icones[tipo] || '🔧';
+    return icones[tipo] || 'MQ';
 }
 
 // Cores por tipo
@@ -215,6 +216,49 @@ const TODAS_MAQUINAS = new Proxy([], {
     }
 });
 
+// ========================================
+// SISTEMA DE TEMA
+// ========================================
+
+// Carrega tema salvo ou usa preferência do sistema
+function carregarTema() {
+    const temaSalvo = localStorage.getItem('tema');
+    if (temaSalvo) {
+        document.documentElement.setAttribute('data-theme', temaSalvo);
+        return temaSalvo;
+    }
+    // Verifica preferência do sistema
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        return 'dark';
+    }
+    return 'light';
+}
+
+// Alterna entre tema claro e escuro
+function toggleTema() {
+    const temaAtual = document.documentElement.getAttribute('data-theme');
+    const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', novoTema);
+    localStorage.setItem('tema', novoTema);
+    atualizarBotaoTema(novoTema);
+    return novoTema;
+}
+
+// Atualiza texto do botão de tema
+function atualizarBotaoTema(tema) {
+    const btn = document.getElementById('btnTema');
+    if (btn) {
+        btn.textContent = tema === 'dark' ? 'Claro' : 'Escuro';
+    }
+}
+
+// Inicializa tema ao carregar
+document.addEventListener('DOMContentLoaded', () => {
+    const tema = carregarTema();
+    atualizarBotaoTema(tema);
+});
+
 // Exporta para uso global
 window.App = {
     showToast,
@@ -234,5 +278,8 @@ window.App = {
     getIconeMaquina,
     getCorMaquina,
     capturarFoto,
-    comprimirImagem
+    comprimirImagem,
+    // Tema
+    toggleTema,
+    carregarTema
 };
