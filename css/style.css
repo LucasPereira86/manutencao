@@ -1,7 +1,10 @@
 /* ========================================
    SISTEMA DE MANUTENÇÃO DE CAMPO
-   Design: Dark mode, Mobile-first, Alta legibilidade
+   Design: Corporate Classic (Slate/Blue), Responsive, Inter Font
    ======================================== */
+
+/* Fonte Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Reset e Base */
 * {
@@ -11,55 +14,71 @@
 }
 
 :root {
-  /* Cores principais */
-  --bg-primary: #0f0f1a;
-  --bg-secondary: #1a1a2e;
-  --bg-card: #16213e;
-  --bg-card-hover: #1f3158;
-  
+  /* Cores principais - Palette Slate (Corporativo/Sóbrio) */
+  --bg-primary: #0f172a;
+  /* Slate 900 - Fundo principal escuro e profundo */
+  --bg-secondary: #1e293b;
+  /* Slate 800 - Fundo de seções/elementos secundários */
+  --bg-card: #334155;
+  /* Slate 700 - Cards com contraste suficiente */
+  --bg-card-hover: #475569;
+  /* Slate 600 - Hover state */
+
   /* Cores de texto */
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #6c6c7c;
-  
-  /* Cores de destaque */
-  --accent-primary: #4f46e5;
-  --accent-secondary: #6366f1;
-  --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  
-  /* Status */
-  --status-ok: #22c55e;
+  --text-primary: #f8fafc;
+  /* Slate 50 - Branco off-white para leitura */
+  --text-secondary: #cbd5e1;
+  /* Slate 300 - Texto secundário claro */
+  --text-muted: #94a3b8;
+  /* Slate 400 - Texto desabilitado/meta */
+
+  /* Cores de destaque - Azul Clássico "Royal" */
+  --accent-primary: #2563eb;
+  /* Blue 600 - Ação principal sólida */
+  --accent-secondary: #3b82f6;
+  /* Blue 500 - Secundário mais vivo */
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  /* Gradiente sutil azul */
+
+  /* Status - Cores mais sóbrias */
+  --status-ok: #10b981;
+  /* Emerald 500 */
   --status-warning: #f59e0b;
+  /* Amber 500 */
   --status-danger: #ef4444;
+  /* Red 500 */
   --status-info: #3b82f6;
-  
-  /* Tamanhos */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  
-  /* Sombras */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-  
+  /* Blue 500 */
+
+  /* Tamanhos e Bordas - Mais clean */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Sombras - Mais suaves */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
   /* Transições */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
 }
 
 html {
-  font-size: 18px;
+  font-size: 16px;
+  /* Voltando para base padrão para melhor escala em desktop */
 }
 
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  line-height: 1.5;
-  -webkit-tap-highlight-color: transparent;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar customizada */
@@ -81,10 +100,10 @@ body {
    ======================================== */
 
 .app-container {
-  max-width: 480px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
-  padding-bottom: 100px; /* Espaço para navegação */
+  padding-bottom: 80px;
 }
 
 /* Header */
@@ -207,7 +226,8 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   text-decoration: none;
-  min-height: 56px; /* Bom para toque */
+  min-height: 56px;
+  /* Bom para toque */
 }
 
 .btn-primary {
@@ -446,6 +466,8 @@ body {
    NAVEGAÇÃO INFERIOR
    ======================================== */
 
+/* Bottom Nav fica na laterial ou topo em desktop futuramente, 
+   mas por enquanto vamos manter fixo centralizado ou wide */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -454,9 +476,13 @@ body {
   background: var(--bg-secondary);
   border-top: 1px solid var(--bg-card);
   display: flex;
-  justify-content: space-around;
-  padding: 0.5rem;
+  justify-content: center;
+  /* Centraliza itens em telas grandes */
+  gap: 2rem;
+  /* Espaço entre itens */
+  padding: 0.75rem;
   z-index: 1000;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .nav-item {
@@ -494,14 +520,16 @@ body {
 
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  /* Responsivo */
+  gap: 1rem;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* Responsivo */
+  gap: 1.5rem;
 }
 
 .machine-card {
@@ -543,9 +571,9 @@ body {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .stat-card {
@@ -966,6 +994,7 @@ body {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
