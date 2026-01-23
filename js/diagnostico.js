@@ -810,7 +810,7 @@ const DIAGNOSTICOS = {
         {
             id: 'esteiras',
             nome: 'Esteiras',
-            icone: '🛤️',
+            icone: '',
             problemas: [
                 {
                     id: 'est_saindo',
@@ -886,7 +886,7 @@ const DIAGNOSTICOS = {
         {
             id: 'eletrico',
             nome: 'Sistema Elétrico',
-            icone: '⚡',
+            icone: '',
             problemas: [
                 {
                     id: 'elet_bateria',
@@ -979,7 +979,7 @@ const DIAGNOSTICOS = {
         {
             id: 'cabine',
             nome: 'Cabine e Ar Condicionado',
-            icone: '❄️',
+            icone: '',
             problemas: [
                 {
                     id: 'cab_ar_nao_gela',
@@ -1053,7 +1053,7 @@ const DIAGNOSTICOS = {
         {
             id: 'transmissao',
             nome: 'Transmissão e Deslocamento',
-            icone: '⚙️',
+            icone: '',
             problemas: [
                 {
                     id: 'trans_nao_anda',
