@@ -5,13 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0f172a">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#050507">
     <title>Diagnóstico - Manutenção de Campo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .sistema-card {
-            background: var(--bg-card);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-md);
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -20,11 +24,13 @@
             gap: 1rem;
             cursor: pointer;
             transition: all var(--transition-fast);
+            box-shadow: var(--glass-shadow);
         }
 
         .sistema-card:hover {
             background: var(--bg-card-hover);
-            transform: translateX(4px);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .sistema-icon {
@@ -48,13 +54,17 @@
         }
 
         .problema-card {
-            background: var(--bg-card);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-md);
             padding: 1.25rem;
             margin-bottom: 0.75rem;
             cursor: pointer;
             transition: all var(--transition-fast);
             border-left: 4px solid var(--status-warning);
+            box-shadow: var(--glass-shadow);
         }
 
         .problema-card:hover {
@@ -67,10 +77,14 @@
         }
 
         .pergunta-container {
-            background: var(--bg-card);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 1rem;
+            box-shadow: var(--glass-shadow);
         }
 
         .pergunta-texto {
@@ -102,9 +116,12 @@
 
         .solucao-container {
             background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%);
-            border: 2px solid var(--status-ok);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--status-ok);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
         }
 
         .solucao-header {
