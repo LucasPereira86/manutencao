@@ -309,7 +309,7 @@
         
         ${sistemaAtual.problemas.map(p => `
           <div class="problema-card" onclick="selecionarProblema('${p.id}')">
-            <div class="problema-sintoma">⚠️ ${p.sintoma}</div>
+            <div class="problema-sintoma">${p.sintoma}</div>
           </div>
         `).join('')}
       `;
@@ -339,7 +339,7 @@
         <button class="back-btn" onclick="voltarAnterior()">← Voltar</button>
         
         <div class="pergunta-container">
-          <div class="pergunta-texto">🤔 ${pergunta.texto}</div>
+          <div class="pergunta-texto">${pergunta.texto}</div>
           
           ${pergunta.opcoes.map((op, i) => `
             <button class="opcao-btn" onclick='processarResposta(${JSON.stringify(op)}, ${JSON.stringify(contexto)})'>
@@ -398,7 +398,7 @@
         
         <div class="solucao-container">
           <div class="solucao-header">
-            <span style="font-size: 1.5rem;">✅</span>
+            <span style="font-size: 1.5rem;"></span>
             <h3>${solucao.titulo}</h3>
           </div>
           
@@ -414,13 +414,13 @@
         
         <div class="mt-3">
           <button class="btn btn-primary btn-block" onclick="voltarInicio()">
-            🔍 Novo Diagnóstico
+            Novo Diagnóstico
           </button>
         </div>
         
         <div class="mt-2">
           <button class="btn btn-secondary btn-block" onclick="registrarDiagnostico()">
-            📋 Registrar este diagnóstico
+            Registrar este diagnóstico
           </button>
         </div>
       `;

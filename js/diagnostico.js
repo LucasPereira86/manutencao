@@ -5,7 +5,7 @@ const DIAGNOSTICOS = {
         {
             id: 'motor',
             nome: 'Motor',
-            icone: '🔥',
+            icone: '',
             problemas: [
                 {
                     id: 'motor_nao_liga',
@@ -228,7 +228,7 @@ const DIAGNOSTICOS = {
         {
             id: 'hidraulico',
             nome: 'Sistema Hidráulico',
-            icone: '💧',
+            icone: '',
             problemas: [
                 {
                     id: 'hidr_lento',
@@ -344,7 +344,7 @@ const DIAGNOSTICOS = {
         {
             id: 'corte_base',
             nome: 'Corte de Base',
-            icone: '⚔️',
+            icone: '',
             problemas: [
                 {
                     id: 'corte_ruim',
@@ -439,7 +439,7 @@ const DIAGNOSTICOS = {
         {
             id: 'divisores',
             nome: 'Divisores de Linha',
-            icone: '🌿',
+            icone: '',
             problemas: [
                 {
                     id: 'div_nao_deita',
@@ -513,7 +513,7 @@ const DIAGNOSTICOS = {
         {
             id: 'rolos',
             nome: 'Rolos Alimentadores',
-            icone: '🔄',
+            icone: '',
             problemas: [
                 {
                     id: 'rolo_nao_puxa',
@@ -570,7 +570,7 @@ const DIAGNOSTICOS = {
         {
             id: 'picador',
             nome: 'Sistema Picador',
-            icone: '🔪',
+            icone: '',
             problemas: [
                 {
                     id: 'pic_tolete_grande',
@@ -662,7 +662,7 @@ const DIAGNOSTICOS = {
         {
             id: 'extratores',
             nome: 'Extratores (Limpeza)',
-            icone: '🌬️',
+            icone: '',
             problemas: [
                 {
                     id: 'ext_nao_limpa',
@@ -735,7 +735,7 @@ const DIAGNOSTICOS = {
         {
             id: 'elevador',
             nome: 'Elevador',
-            icone: '⬆️',
+            icone: '',
             problemas: [
                 {
                     id: 'elev_nao_gira',
