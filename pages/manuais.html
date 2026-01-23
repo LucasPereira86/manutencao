@@ -308,23 +308,19 @@
     <div class="app-container">
         <header class="app-header">
             <div>
-                <h1 class="app-title">📚 Manuais</h1>
+                <h1 class="app-title">Manuais</h1>
                 <p class="app-subtitle">Documentação técnica CH570</p>
             </div>
         </header>
         <div class="search-box">
-            <input type="text" id="buscaManual" placeholder="🔍 Buscar manual..." oninput="filtrarManuais(this.value)">
+            <input type="text" id="buscaManual" placeholder="Buscar manual..." oninput="filtrarManuais(this.value)">
         </div>
         <div id="listaManuais"></div>
         <nav class="bottom-nav">
-            <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span
-                    class="nav-label">Início</span></a>
-            <a href="checklist.html" class="nav-item"><span class="nav-icon">📋</span><span
-                    class="nav-label">Checklist</span></a>
-            <a href="manuais.html" class="nav-item active"><span class="nav-icon">📚</span><span
-                    class="nav-label">Manuais</span></a>
-            <a href="diagnostico.html" class="nav-item"><span class="nav-icon">🔍</span><span
-                    class="nav-label">Diagnóstico</span></a>
+            <a href="../index.html" class="nav-item"><span class="nav-icon">Início</span></a>
+            <a href="checklist.html" class="nav-item"><span class="nav-icon">Checklist</span></a>
+            <a href="manuais.html" class="nav-item active"><span class="nav-icon">Manuais</span></a>
+            <a href="diagnostico.html" class="nav-item"><span class="nav-icon">Diagnóstico</span></a>
         </nav>
     </div>
 
@@ -340,7 +336,7 @@
 
         <!-- Barra de busca no PDF -->
         <div class="pdf-search-bar">
-            <input type="text" id="pdfSearchInput" placeholder="🔍 Buscar texto no PDF..."
+            <input type="text" id="pdfSearchInput" placeholder="Buscar texto no PDF..."
                 onkeydown="if(event.key==='Enter') buscarNoPDF()">
             <button onclick="buscarNoPDF()">Buscar</button>
             <div class="search-nav" id="searchNavControls" style="display: none;">
